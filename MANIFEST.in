@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include kersten *.css
+recursive-include kersten *.csv
+recursive-include kersten *.html
+recursive-include kersten *.ico
+recursive-include kersten *.js
+recursive-include kersten *.json
+recursive-include kersten *.md
+recursive-include kersten *.png
+recursive-include kersten *.py
+recursive-include kersten *.svg
+recursive-include kersten *.txt
+recursive-exclude kersten *.pyc
