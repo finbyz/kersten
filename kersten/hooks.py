@@ -112,9 +112,9 @@ web_include_css = "/assets/kersten/css/kersten.css"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-#	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
+}
 
 # Document Events
 # ---------------

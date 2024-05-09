@@ -1,0 +1,52 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:web_template",
+ "creation": "2024-05-09 11:34:51.234315",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "web_template",
+  "module"
+ ],
+ "fields": [
+  {
+   "fieldname": "web_template",
+   "fieldtype": "Link",
+   "label": "Web template",
+   "options": "Web Template",
+   "unique": 1
+  },
+  {
+   "fieldname": "module",
+   "fieldtype": "Link",
+   "label": "Module",
+   "options": "Module Def"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-05-09 11:37:04.183324",
+ "modified_by": "Administrator",
+ "module": "kersten",
+ "name": "Web Template Module Map",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
