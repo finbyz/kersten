@@ -59,7 +59,6 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 				self.route = parent_item_group.route + "/"
 
 		self.route += self.scrub(self.website_itemgroup_name)
-
 		return self.route
 
 	def on_trash(self):
@@ -106,7 +105,44 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 		context.item_group_name = self.website_itemgroup_name
 		context.full_width = 0
 
+		# related_items = frappe.db.sql("""
+		# select name, route, image
+		# from `tabWebsite Itemgroup`
+		# where parent_website_itemgroup=%s
+		# and show_in_website=1
+		# order by creation desc
+		# """, self.name, as_dict=1)
+
+		related_items = get_child_groups_for_website_(self.name, immediate=False, include_self=False)
+		context.related_items = related_items
+
 		return context
+
+def get_child_groups_for_website_(item_group_name, immediate=False, include_self=False):
+    """Returns child item groups *excluding* passed group."""
+    item_group = frappe.get_cached_value("Website Itemgroup", item_group_name, ["lft", "rgt"], as_dict=True)
+    filters = {"lft": (">", item_group.get("lft")), "rgt": ("<", item_group.get("rgt")), "show_in_website": 1}
+
+    if immediate:
+        filters["parent_website_itemgroup"] = item_group_name
+
+    if include_self:
+        filters.update({"lft": (">=", item_group.get("lft")), "rgt": ("<=", item_group.get("rgt"))})
+
+    child_groups = []
+    stack = [item_group_name]
+
+    while stack:
+        parent_name = stack.pop()
+        children = frappe.get_all("Website Itemgroup",
+                                  filters={"parent_website_itemgroup": parent_name, "show_in_website": 1},
+                                  fields=["name", "route", "image"], order_by="name")
+        child_groups.extend(children)
+        if not immediate:
+            stack.extend(child['name'] for child in children)
+
+    return child_groups
+
 	
 def get_item_for_list_in_html(context):
 	# add missing absolute link in files
