@@ -114,6 +114,7 @@ web_include_css = "/assets/kersten/css/kersten.css"
 
 override_doctype_class = {
 	"Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
+    "Website Item": "kersten.kersten.override.website_item.WebsiteItem",   
 }
 
 # Document Events
@@ -157,9 +158,9 @@ override_doctype_class = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-#	"frappe.desk.doctype.event.event.get_events": "kersten.event.get_events"
-# }
+override_whitelisted_methods = {
+	"webshop.webshop.api.get_product_filter_data": "kersten.api.get_product_filter_data"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

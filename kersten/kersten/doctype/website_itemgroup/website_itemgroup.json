@@ -1,0 +1,277 @@
+{
+ "actions": [],
+ "allow_guest_to_view": 1,
+ "allow_rename": 1,
+ "autoname": "field:website_itemgroup_name",
+ "creation": "2024-05-21 13:07:13.251141",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_p2wd",
+  "website_itemgroup_name",
+  "parent_website_itemgroup",
+  "is_group",
+  "image",
+  "column_break_bekd",
+  "section_break_rylb",
+  "column_break_mpjf",
+  "show_sidebar",
+  "website_description",
+  "website_sidebar",
+  "rgt",
+  "lft",
+  "old_parent",
+  "website_settings_section",
+  "show_in_website",
+  "website_title",
+  "route",
+  "description",
+  "jodit_editor",
+  "website_specifications",
+  "website_filters_section",
+  "filter_fields",
+  "filter_attributes",
+  "include_descendants",
+  "slideshow",
+  "column_break_tyyo",
+  "weightage",
+  "section_break_uoed",
+  "full_width",
+  "content_type",
+  "page_building_blocks",
+  "website_content"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_p2wd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Website Itemgroup"
+  },
+  {
+   "fieldname": "parent_website_itemgroup",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Parent Website Itemgroup",
+   "options": "Website Itemgroup"
+  },
+  {
+   "default": "0",
+   "description": "Check this if you want to show in website",
+   "fieldname": "show_in_website",
+   "fieldtype": "Check",
+   "label": "Show in Website"
+  },
+  {
+   "depends_on": "show_in_website",
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route"
+  },
+  {
+   "fieldname": "website_title",
+   "fieldtype": "Data",
+   "label": "Website title"
+  },
+  {
+   "fieldname": "slideshow",
+   "fieldtype": "Data",
+   "label": "Slideshow"
+  },
+  {
+   "depends_on": "show_in_website",
+   "description": "HTML / Banner that will show on the top of product list.",
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Content"
+  },
+  {
+   "fieldname": "website_filters_section",
+   "fieldtype": "Section Break",
+   "label": "Website Filters"
+  },
+  {
+   "fieldname": "column_break_tyyo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "weightage",
+   "fieldtype": "Int",
+   "label": "Weightage"
+  },
+  {
+   "default": "0",
+   "fieldname": "include_descendants",
+   "fieldtype": "Check",
+   "label": "Include Descendants"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "section_break_rylb",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Sidebar and Comments"
+  },
+  {
+   "fieldname": "column_break_bekd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "website_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Website Settings"
+  },
+  {
+   "depends_on": "show_in_website",
+   "fieldname": "jodit_editor",
+   "fieldtype": "HTML",
+   "label": "Content"
+  },
+  {
+   "depends_on": "show_in_website",
+   "fieldname": "website_specifications",
+   "fieldtype": "Table",
+   "label": "Website Specifications",
+   "options": "Item Website Specification"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_sidebar",
+   "fieldtype": "Check",
+   "label": "Show Sidebar"
+  },
+  {
+   "fieldname": "website_description",
+   "fieldtype": "HTML",
+   "label": "Website Description"
+  },
+  {
+   "fieldname": "website_sidebar",
+   "fieldtype": "Link",
+   "label": "Website Sidebar",
+   "options": "Website Sidebar"
+  },
+  {
+   "fieldname": "website_itemgroup_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Group Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "section_break_uoed",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "content_type",
+   "fieldtype": "Select",
+   "label": "Content Type",
+   "options": "HTML\nPage Builder"
+  },
+  {
+   "default": "0",
+   "fieldname": "full_width",
+   "fieldtype": "Check",
+   "label": "Full Width"
+  },
+  {
+   "depends_on": "eval:doc.content_type == \"Page Builder\"",
+   "fieldname": "page_building_blocks",
+   "fieldtype": "Table",
+   "label": "Page Building Blocks",
+   "options": "Web Page Block"
+  },
+  {
+   "depends_on": "eval:doc.content_type == \"HTML\"",
+   "description": "You can use any valid Bootstrap 4 markup in this field. It will be shown on your Item Page.",
+   "fieldname": "website_content",
+   "fieldtype": "HTML Editor",
+   "label": "Website Content"
+  },
+  {
+   "fieldname": "filter_fields",
+   "fieldtype": "Table",
+   "label": "Item Fields",
+   "options": "Website Filter Field"
+  },
+  {
+   "fieldname": "filter_attributes",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Attribute",
+   "options": "Website Attribute"
+  },
+  {
+   "fieldname": "column_break_mpjf",
+   "fieldtype": "Column Break",
+   "hidden": 1
+  }
+ ],
+ "has_web_view": 1,
+ "index_web_pages_for_search": 1,
+ "is_published_field": "show_in_website",
+ "is_tree": 1,
+ "links": [
+  {
+   "link_doctype": "Website Item",
+   "link_fieldname": "website_itemgroup",
+   "table_fieldname": "website_item_groups"
+  }
+ ],
+ "modified": "2024-06-24 07:18:03.681593",
+ "modified_by": "Administrator",
+ "module": "kersten",
+ "name": "Website Itemgroup",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_website_itemgroup",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "route": "route",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

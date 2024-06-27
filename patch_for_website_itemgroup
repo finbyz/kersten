@@ -1,0 +1,29 @@
+doc = frappe.get_all("Item Group",fields= "name")
+
+for r in doc:
+	print(r)
+	row = frappe.get_doc("Item Group",r.name)
+	newdoc = frappe.new_doc("Website Itemgroup")
+	newdoc.website_itemgroup_name = row.item_group_name
+	newdoc.image = row.image
+	newdoc.show_in_website = row.show_in_website
+	newdoc.description = row.description
+	newdoc.weightage = row.weightage
+	newdoc.include_descendants = row.include_descendants
+	newdoc.slideshow = row.slideshow
+	for d in row.website_specifications:
+		website_specifications_new = newdoc.append("website_specifications",{})
+		website_specifications_new.label = d.label
+		website_specifications_new.description = d.description
+	for d in row.filter_fields:
+		filter_fields_new = newdoc.append("filter_fields",{})
+		filter_fields_new.fieldname = d.fieldname
+	newdoc.save()
+
+
+frappe.db.sql("""
+UPDATE `tabWebsite Itemgroup` as wig
+JOIN `tabItem Group` as ig
+ON wig.name = ig.name
+SET wig.parent_website_itemgroup = ig.parent_item_group, wig.is_group = ig.is_group
+""")

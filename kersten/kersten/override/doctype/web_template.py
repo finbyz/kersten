@@ -5,25 +5,6 @@ import os
 from frappe import scrub, get_pymodule_path, get_pymodule_path
 from frappe.modules.export_file import scrub_dt_dn, get_module_path
 
-
-# def get_module_path(module, *joins):
-# 	"""Get the path of the given module name.
-
-# 	:param module: Module name.
-# 	:param *joins: Join additional path elements using `os.path.join`."""
-# 	# from frappe.modules.utils import get_module_app
-
-# 	# app = get_module_app(module)
-
-# 	for app in reversed(frappe.get_installed_apps()):
-# 		try:
-# 			path = get_pymodule_path(app + "." + scrub(module), *joins)
-# 		except ModuleNotFoundError:
-# 			continue
-# 		else:
-# 			return path
-	
-# 	frappe.throw(_("Module {} not found").format(module), exc=frappe.DoesNotExistError)
 	 
 class WebTemplate(_WebTemplate):
 	def get_template_folder(self):
