@@ -113,12 +113,12 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 		# order by creation desc
 		# """, self.name, as_dict=1)
 
-		related_items = get_child_groups_for_website_(self.name, immediate=False, include_self=False)
+		related_items = get_super_child_groups_for_website(self.name, immediate=False, include_self=False)
 		context.related_items = related_items
 
 		return context
 
-def get_child_groups_for_website_(item_group_name, immediate=False, include_self=False):
+def get_super_child_groups_for_website(item_group_name, immediate=False, include_self=False):
     """Returns child item groups *excluding* passed group."""
     item_group = frappe.get_cached_value("Website Itemgroup", item_group_name, ["lft", "rgt"], as_dict=True)
     filters = {"lft": (">", item_group.get("lft")), "rgt": ("<", item_group.get("rgt")), "show_in_website": 1}
