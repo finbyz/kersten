@@ -66,7 +66,7 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 	
 	def get_html(self, context):
 		if self.get('content_type') == 'Page Builder':
-			out = get_web_blocks_html(self.page_building_blocks)
+			out = get_web_blocks_html(self.page_blocks)
 			context.page_builder_html = out.html
 			context.page_builder_scripts = out.scripts
 
@@ -119,31 +119,52 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 		return context
 
 def get_super_child_groups_for_website(item_group_name, immediate=False, include_self=False):
-    """Returns child item groups *excluding* passed group."""
+    """Returns child item groups excluding the passed group unless include_self is True."""
     item_group = frappe.get_cached_value("Website Itemgroup", item_group_name, ["lft", "rgt"], as_dict=True)
-    filters = {"lft": (">", item_group.get("lft")), "rgt": ("<", item_group.get("rgt")), "show_in_website": 1}
-
-    if immediate:
-        filters["parent_website_itemgroup"] = item_group_name
-
+    lft = item_group.get("lft")
+    rgt = item_group.get("rgt")
+    
+    filters = ["show_in_website = 1"]
+    params = []
+    
     if include_self:
-        filters.update({"lft": (">=", item_group.get("lft")), "rgt": ("<=", item_group.get("rgt"))})
-
+        filters.append("lft >= %s")
+        filters.append("rgt <= %s")
+        params.extend([lft, rgt])
+    else:
+        filters.append("lft > %s")
+        filters.append("rgt < %s")
+        params.extend([lft, rgt])
+    
+    if immediate:
+        filters.append("parent_website_itemgroup = %s")
+        params.append(item_group_name)
+    
+    filters_condition = " AND ".join(filters)
+    
     child_groups = []
     stack = [item_group_name]
 
     while stack:
         parent_name = stack.pop()
-        children = frappe.get_all("Website Itemgroup",
-                                  filters={"parent_website_itemgroup": parent_name, "show_in_website": 1},
-                                  fields=["name", "route", "image"], order_by="name")
+        children = frappe.db.sql(f"""
+            SELECT 
+                DISTINCT wi.name, wi.route, wi.image
+            FROM
+                `tabWebsite Itemgroup` wi
+                JOIN `tabWebsite Item Group` wig ON wi.name = wig.website_itemgroup 
+                JOIN `tabWebsite Item` wia ON wig.parent = wia.name
+            WHERE
+                {filters_condition} AND wi.parent_website_itemgroup = %s
+            GROUP BY
+                wi.weightage DESC, wi.name ASC
+        """, params + [parent_name], as_dict=True)
         child_groups.extend(children)
         if not immediate:
             stack.extend(child['name'] for child in children)
 
     return child_groups
 
-	
 def get_item_for_list_in_html(context):
 	# add missing absolute link in files
 	# user may forget it during upload

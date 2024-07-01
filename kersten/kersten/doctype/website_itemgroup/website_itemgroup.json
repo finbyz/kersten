@@ -38,7 +38,7 @@
   "section_break_uoed",
   "full_width",
   "content_type",
-  "page_building_blocks",
+  "page_blocks",
   "website_content"
  ],
  "fields": [
@@ -129,6 +129,7 @@
    "default": "0",
    "fieldname": "include_descendants",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Include Descendants"
   },
   {
@@ -206,13 +207,6 @@
    "label": "Full Width"
   },
   {
-   "depends_on": "eval:doc.content_type == \"Page Builder\"",
-   "fieldname": "page_building_blocks",
-   "fieldtype": "Table",
-   "label": "Page Building Blocks",
-   "options": "Web Page Block"
-  },
-  {
    "depends_on": "eval:doc.content_type == \"HTML\"",
    "description": "You can use any valid Bootstrap 4 markup in this field. It will be shown on your Item Page.",
    "fieldname": "website_content",
@@ -222,6 +216,7 @@
   {
    "fieldname": "filter_fields",
    "fieldtype": "Table",
+   "hidden": 1,
    "label": "Item Fields",
    "options": "Website Filter Field"
   },
@@ -236,6 +231,13 @@
    "fieldname": "column_break_mpjf",
    "fieldtype": "Column Break",
    "hidden": 1
+  },
+  {
+   "depends_on": "eval:doc.content_type == \"Page Builder\"",
+   "fieldname": "page_blocks",
+   "fieldtype": "Table",
+   "label": "Page Building Blocks",
+   "options": "Web Page Block"
   }
  ],
  "has_web_view": 1,
@@ -249,7 +251,7 @@
    "table_fieldname": "website_item_groups"
   }
  ],
- "modified": "2024-06-24 07:18:03.681593",
+ "modified": "2024-07-01 07:05:41.371225",
  "modified_by": "Administrator",
  "module": "kersten",
  "name": "Website Itemgroup",

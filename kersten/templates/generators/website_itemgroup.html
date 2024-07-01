@@ -37,27 +37,18 @@
     {% endif %}
 </div>
 <div>
+</div>
 
-</div>
-<div class="item-content">
-    <div class="product-page-content" itemscope itemtype="http://schema.org/Product">
-        {% if doc.content_type == 'Page Builder' %}
-        {{ page_builder_html }}
-        {% else %}
-        {{ doc.website_content or '' }}
-        {% endif %}
-    </div>
-</div>
 <div class="item-group-content" itemscope itemtype="http://schema.org/Product" data-item-group="{{ name }}">
     <div class="item-group-slideshow">
         {% if slideshow %} <!-- slideshow -->
-        {{ web_block(
-        "Hero Slider",
-        values=slideshow,
-        add_container=0,
-        add_top_padding=0,
-        add_bottom_padding=0,
-        ) }}
+            {{ web_block(
+            "Hero Slider",
+            values=slideshow,
+            add_container=0,
+            add_top_padding=0,
+            add_bottom_padding=0,
+            ) }}
         {% endif %}
     </div>
 </div>
@@ -87,7 +78,25 @@
         {% endfor %}
     </div>
 </div>
+<br>
+<br>
+<div class="row">
+    <h3 class="section-title">{{ _("Related Website Items") }}</h3>
+    <div id="product-listing" class="col-12 order-2 col-md-12 order-md-2 item-card-group-section">
+        <!-- Products Rendered in all-products/index.js-->
+    </div>
 
+    
+</div>
+<div class="item-content">
+    <div class="product-page-content" itemscope itemtype="http://schema.org/Product">
+        {% if doc.content_type == 'Page Builder' %}
+        {{ page_builder_html }}
+        {% else %}
+        {{ doc.website_content or '' }}
+        {% endif %}
+    </div>
+</div>
 <script>
     frappe.ready(() => {
         $('.btn-prev, .btn-next').click((e) => {
