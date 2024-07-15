@@ -149,7 +149,9 @@ override_doctype_class = {
 #		"kersten.tasks.monthly"
 #	],
 # }
-
+fixtures = [
+    {"dt": "Custom Field"}
+]
 # Testing
 # -------
 
