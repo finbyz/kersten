@@ -12,7 +12,9 @@
   "parent_website_itemgroup",
   "is_group",
   "image",
+  "banner",
   "column_break_bekd",
+  "show_related_website_item",
   "section_break_rylb",
   "column_break_mpjf",
   "show_sidebar",
@@ -36,10 +38,14 @@
   "column_break_tyyo",
   "weightage",
   "section_break_uoed",
+  "column_break_qokh",
   "full_width",
   "content_type",
   "page_blocks",
-  "website_content"
+  "website_content",
+  "content_type_page",
+  "page_building_block",
+  "website_content_page"
  ],
  "fields": [
   {
@@ -135,7 +141,7 @@
   {
    "fieldname": "image",
    "fieldtype": "Attach Image",
-   "label": "Image"
+   "label": "Icon"
   },
   {
    "fieldname": "section_break_rylb",
@@ -238,6 +244,42 @@
    "fieldtype": "Table",
    "label": "Page Building Blocks",
    "options": "Web Page Block"
+  },
+  {
+   "depends_on": "eval:doc.content_type == \"Page Builder\"",
+   "fieldname": "column_break_qokh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "content_type_page",
+   "fieldtype": "Select",
+   "label": "Content Type Page",
+   "options": "HTML\nPage Builder"
+  },
+  {
+   "depends_on": "eval:doc.content_type_page == \"HTML\"",
+   "description": "You can use any valid Bootstrap 4 markup in this field. It will be shown on your Item Page.",
+   "fieldname": "website_content_page",
+   "fieldtype": "HTML Editor",
+   "label": "Website Content Page"
+  },
+  {
+   "depends_on": "eval:doc.content_type_page == \"Page Builder\"",
+   "fieldname": "page_building_block",
+   "fieldtype": "Table",
+   "label": "Page Building Blocks",
+   "options": "Web Page Block"
+  },
+  {
+   "fieldname": "banner",
+   "fieldtype": "Attach Image",
+   "label": "Banner"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_related_website_item",
+   "fieldtype": "Check",
+   "label": "Show Related Website item"
   }
  ],
  "has_web_view": 1,
@@ -251,7 +293,7 @@
    "table_fieldname": "website_item_groups"
   }
  ],
- "modified": "2024-07-01 07:05:41.371225",
+ "modified": "2024-07-10 11:47:03.050156",
  "modified_by": "Administrator",
  "module": "kersten",
  "name": "Website Itemgroup",

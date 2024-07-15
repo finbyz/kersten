@@ -70,6 +70,12 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 			context.page_builder_html = out.html
 			context.page_builder_scripts = out.scripts
 
+	def get_html_second_page_builder(self, context):
+		if self.get('content_type_page') == 'Page Builder':
+			output = get_web_blocks_html(self.page_building_block)
+			context.page_builder_html2 = output.html
+			context.page_builder_scripts = output.scripts
+
 	def get_context(self, context):
 		context.show_search = True
 		context.body_class = "product-page"
@@ -78,6 +84,7 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 		)
 		context.search_link = "/product_search"
 		self.get_html(context)
+		self.get_html_second_page_builder(context)
 		filter_engine = ProductFiltersBuilder(self.name)
 
 		context.field_filters = filter_engine.get_field_filters()

@@ -2,7 +2,7 @@
 {% extends "templates/web.html" %}
 
 {% block header %}
-<div class="mb-6">{{ _(website_title or website_itemgroup_name) }}</div>
+<div class="mb-6"><h1>{{ _(website_title or website_itemgroup_name) }}</h1></div>
 {% endblock header %}
 
 {% block script %}
@@ -17,15 +17,16 @@
 
 {% block page_content %}
 {% from "erpnext/templates/includes/macros.html" import product_image %}
+
 <div class="section-cta-container">
     <div class="section-cta-and-image">
         <div class="image-wrapper">
-            <img src="{{ image }}" alt="{{ title }}" style="opacity: 0.8; width: 100%; height:auto;" />
+            <img src="{{ banner }}" alt="{{ title }}" style="opacity: 0.8; width: 100%; height:auto;" />
         </div>
         <div class="centered text-center">
-            <h2 class="title mt-0"
+            <h1 class="title mt-0"
                 style="text-shadow: white; font-size: 3rem;  color: 3px 3px 6px rgba(0, 0, 0, 0.4); width: 100%;">
-                {{website_itemgroup_name}}</h2>
+                {{website_itemgroup_name}}</h1>
         </div>
     </div>
 </div>
@@ -36,7 +37,14 @@
     {{ "" }}
     {% endif %}
 </div>
-<div>
+<div class="item-content">
+    <div class="product-page-content" itemscope itemtype="http://schema.org/Product">
+        {% if doc.content_type_page == 'Page Builder' %}
+        {{ page_builder_html2 }}
+        {% else %}
+        {{ doc.website_content_page or '' }}
+        {% endif %}
+    </div>
 </div>
 
 <div class="item-group-content" itemscope itemtype="http://schema.org/Product" data-item-group="{{ name }}">
@@ -54,7 +62,9 @@
 </div>
 
 <div class="related-items-section mt-6">
+    {% if related_items %}
     <h3 class="section-title">{{ _("Related Items") }}</h3>
+    {% endif %}
     <div class="card-grid row row-cols-1 row-cols-md-4 g-4">
         {% for item in related_items %}
         <div class="col mt-2">
@@ -69,8 +79,10 @@
                 </div>
                 {% endif %}
 
-                <div class="card-body text-center text-muted small">
+                <div class="card-body">
+                    <h3 class="card-title mt-0">
                     {{ item.name or '' }}
+                </h3>
                 </div>
                 <a href="{{ item.route or '#' }}" class="stretched-link"></a>
             </div>
@@ -80,6 +92,7 @@
 </div>
 <br>
 <br>
+{% if doc.show_related_website_item %}
 <div class="row">
     <h3 class="section-title">{{ _("Related Website Items") }}</h3>
     <div id="product-listing" class="col-12 order-2 col-md-12 order-md-2 item-card-group-section">
@@ -88,6 +101,7 @@
 
     
 </div>
+{% endif %}
 <div class="item-content">
     <div class="product-page-content" itemscope itemtype="http://schema.org/Product">
         {% if doc.content_type == 'Page Builder' %}
