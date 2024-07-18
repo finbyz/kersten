@@ -107,8 +107,9 @@
   },
   {
    "fieldname": "slideshow",
-   "fieldtype": "Data",
-   "label": "Slideshow"
+   "fieldtype": "Link",
+   "label": "Slideshow",
+   "options": "Website Slideshow"
   },
   {
    "depends_on": "show_in_website",
@@ -293,7 +294,7 @@
    "table_fieldname": "website_item_groups"
   }
  ],
- "modified": "2024-07-10 11:47:03.050156",
+ "modified": "2024-07-18 07:28:21.982238",
  "modified_by": "Administrator",
  "module": "kersten",
  "name": "Website Itemgroup",
