@@ -3,6 +3,13 @@
 
 {% block header %}
 <div class="mb-6"><h1>{{ _(website_title or website_itemgroup_name) }}</h1></div>
+{% if doc.show_related_website_item %}
+<style>
+    .btn-prev, .btn-next {
+        display: none !important;
+    }
+</style>
+{% endif %}
 {% endblock header %}
 
 {% block script %}
