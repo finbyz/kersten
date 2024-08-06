@@ -41,7 +41,7 @@ def get_slideshow(slideshow):
 
 def get_tabs(categories):
     tab_values = {
-        "title": _("Shop by Category"),
+        "title": _("Search by Product Type"),
     }
 
     categorical_data = get_category_records(categories)
@@ -70,7 +70,7 @@ def get_category_records(categories):
                     JOIN `tabWebsite Item Group` wig ON wi.name = wig.website_itemgroup 
                     JOIN `tabWebsite Item` wia ON wig.parent = wia.name
                 WHERE
-                    wi.show_in_website = 1 AND wia.published = 1
+                    wi.show_in_website = 1 AND wia.published = 1 AND wi.is_group = 1 AND wi.parent_website_itemgroup ="Search by Product Type"
                 GROUP BY
                     wi.weightage DESC, wi.name ASC
             """, as_dict=True)
