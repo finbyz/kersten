@@ -162,7 +162,7 @@ def get_super_child_groups_for_website(item_group_name, immediate=False, include
                 JOIN `tabWebsite Item Group` wig ON wi.name = wig.website_itemgroup 
                 JOIN `tabWebsite Item` wia ON wig.parent = wia.name
             WHERE
-                {filters_condition} AND wi.parent_website_itemgroup = %s
+                {filters_condition} AND wi.parent_website_itemgroup = %s AND wi.is_group = 1
             GROUP BY
                 wi.weightage DESC, wi.name ASC
         """, params + [parent_name], as_dict=True)
