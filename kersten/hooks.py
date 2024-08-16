@@ -114,7 +114,8 @@ web_include_css = "/assets/kersten/css/kersten.css"
 
 override_doctype_class = {
 	"Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
-    "Website Item": "kersten.kersten.override.website_item.WebsiteItem",   
+    "Website Item": "kersten.kersten.override.website_item.WebsiteItem",  
+    "Assignment Rule": "kersten.kersten.override.doctype.assignment_rule.AssignmentRule", 
 }
 
 # Document Events
@@ -148,7 +149,8 @@ doc_events = {
 #	],
 # }
 fixtures = [
-    {"dt": "Custom Field"}
+    {"dt": "Custom Field"},
+    {"dt": "Property Setter","filters": [["module", "=","kersten"]]}
 ]
 # Testing
 # -------
