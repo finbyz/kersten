@@ -1,7 +1,7 @@
 import frappe
 from frappe.utils import cint
 
-from webshop.webshop.product_data_engine.filters import ProductFiltersBuilder
+from kersten.kersten.product_data_engine.filters import ProductFiltersBuilder
 
 sitemap = 1
 
