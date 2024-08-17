@@ -120,7 +120,7 @@ class WebsiteItemgroup(WebsiteGenerator, NestedSet):
 		# order by creation desc
 		# """, self.name, as_dict=1)
 
-		related_items = get_super_child_groups_for_website(self.name, immediate=False, include_self=False)
+		related_items = get_super_child_groups_for_website(self.name, immediate=True, include_self=False)
 		context.related_items = related_items
 
 		return context
