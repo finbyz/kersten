@@ -36,7 +36,7 @@
 
 {% block page_content %}
 {% from "erpnext/templates/includes/macros.html" import product_image %}
-
+{% if banner %}
 <div class="section-cta-container">
     <div class="section-cta-and-image">
         <div class="image-wrapper">
@@ -49,6 +49,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 <div class="product-description" itemprop="description">
     {% if frappe.utils.strip_html(doc.description or '') %}
     {{ doc.description }}
@@ -81,9 +82,9 @@
 </div>
 
 <div class="related-items-section mt-6">
-    {% if related_items %}
+    <!-- {% if related_items %}
     <h3 class="section-title">{{ _("Related Items") }}</h3>
-    {% endif %}
+    {% endif %} -->
     <div class="card-grid row row-cols-1 row-cols-md-4 g-4">
         {% for item in related_items %}
 
