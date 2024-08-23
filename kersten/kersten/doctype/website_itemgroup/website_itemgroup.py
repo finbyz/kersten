@@ -187,7 +187,7 @@ def get_parent_item_groups(item_group_name, from_item=False):
 	settings = frappe.get_cached_doc("Webshop Settings")
 
 	if settings.enable_field_filters:
-		base_nav_page = {"name": _("Shop by Category"), "route": "/shop-by-category"}
+		base_nav_page = {}
 	else:
 		base_nav_page = {"name": _("All Products"), "route": "/all-products"}
 
@@ -200,8 +200,10 @@ def get_parent_item_groups(item_group_name, from_item=False):
 
 	base_parents = [
 		{"name": _("Home"), "route": "/"},
-		base_nav_page,
 	]
+
+	if base_nav_page:
+		base_parents.append(base_nav_page)
 
 	if not item_group_name:
 		return base_parents
