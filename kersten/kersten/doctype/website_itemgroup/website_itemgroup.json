@@ -45,7 +45,9 @@
   "website_content",
   "content_type_page",
   "page_building_block",
-  "website_content_page"
+  "website_content_page",
+  "faq_section",
+  "faq"
  ],
  "fields": [
   {
@@ -281,6 +283,16 @@
    "fieldname": "show_related_website_item",
    "fieldtype": "Check",
    "label": "Show Related Website item"
+  },
+  {
+   "fieldname": "faq_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "faq",
+   "fieldtype": "Table",
+   "label": "FAQ ",
+   "options": "FAQ Questions"
   }
  ],
  "has_web_view": 1,
@@ -294,7 +306,7 @@
    "table_fieldname": "website_item_groups"
   }
  ],
- "modified": "2024-07-18 07:28:21.982238",
+ "modified": "2024-08-23 13:59:38.729753",
  "modified_by": "Administrator",
  "module": "kersten",
  "name": "Website Itemgroup",
