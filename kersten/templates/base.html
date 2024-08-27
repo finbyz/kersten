@@ -20,6 +20,7 @@
 	>
 	{% endblock %}
     {% if doctype in ("Website Itemgroup","Website Item") %}
+	{% if doc.faq %}
     <script type="application/ld+json">
         {
           "@context": "https://schema.org",
@@ -36,6 +37,7 @@
           ]
         }
         </script>
+		{% endif %}
     {% endif %}
 
 	{%- block head -%}
