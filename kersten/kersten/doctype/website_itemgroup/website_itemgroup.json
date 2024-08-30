@@ -47,7 +47,9 @@
   "page_building_block",
   "website_content_page",
   "faq_section",
-  "faq"
+  "faq_group",
+  "seo_section_section",
+  "set_meta_tags"
  ],
  "fields": [
   {
@@ -289,10 +291,20 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "faq",
-   "fieldtype": "Table",
-   "label": "FAQ ",
-   "options": "FAQ Questions"
+   "fieldname": "seo_section_section",
+   "fieldtype": "Section Break",
+   "label": "SEO Section"
+  },
+  {
+   "fieldname": "set_meta_tags",
+   "fieldtype": "Button",
+   "label": "Set Meta Tags"
+  },
+  {
+   "fieldname": "faq_group",
+   "fieldtype": "Table MultiSelect",
+   "label": "FAQ Groups",
+   "options": "FAQ Groups item"
   }
  ],
  "has_web_view": 1,
@@ -306,7 +318,7 @@
    "table_fieldname": "website_item_groups"
   }
  ],
- "modified": "2024-08-23 13:59:38.729753",
+ "modified": "2024-08-30 08:41:48.998948",
  "modified_by": "Administrator",
  "module": "kersten",
  "name": "Website Itemgroup",

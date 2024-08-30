@@ -1,11 +1,6 @@
 // Copyright (c) 2024, viral and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Website Itemgroup", {
-// 	refresh(frm) {
-
-// 	},
-// });
 // Copyright (c) 2020, Finbyz Tech Pvt Ltd and contributors
 // For license information, please see license.txt
 
@@ -101,7 +96,9 @@ frappe.ui.form.on('Website Itemgroup', {
 			frappe.set_route("Tree", "Website Itemgroup");
 		});
 	},
-
+	set_meta_tags: (frm) => {
+		frappe.utils.set_meta_tag(frm.doc.route);
+	},
 	set_root_readonly: function(frm) {
 		// read-only for root item group
 		frm.set_intro("");

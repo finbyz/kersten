@@ -1,0 +1,37 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-08-30 07:10:45.841244",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_7pb4",
+  "faq_group_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_7pb4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "faq_group_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "FAQ Group item",
+   "options": "FAQ Groups"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-08-30 07:33:15.938884",
+ "modified_by": "Administrator",
+ "module": "kersten",
+ "name": "FAQ Groups item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

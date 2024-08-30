@@ -21,6 +21,16 @@
         color: white; 
     }
 }
+@media only screen and (max-width: 768px) {
+    .section-cta-and-image {
+        position: relative;
+        border-radius: 1rem;
+        max-width: 100%;
+        height: auto;
+        overflow: hidden;
+        min-height:170px;
+    }
+}
 </style>
 {% endblock header %}
 
@@ -58,7 +68,7 @@
     {% endif %}
 </div>
 <div class="item-content">
-    <div class="product-page-content" itemscope itemtype="http://schema.org/Product">
+    <div class="product-page-content">
         {% if doc.content_type_page == 'Page Builder' %}
         {{ page_builder_html2 }}
         {% else %}
@@ -67,7 +77,7 @@
     </div>
 </div>
 
-<div class="item-group-content" itemscope itemtype="http://schema.org/Product" data-item-group="{{ name }}">
+<div class="item-group-content" data-item-group="{{ name }}">
     <div class="item-group-slideshow">
         {% if slideshow %} <!-- slideshow -->
             {{ web_block(
@@ -125,7 +135,7 @@
 </div>
 {% endif %}
 <div class="item-content">
-    <div class="product-page-content" itemscope itemtype="http://schema.org/Product">
+    <div class="product-page-content">
         {% if doc.content_type == 'Page Builder' %}
         {{ page_builder_html }}
         {% else %}
@@ -133,8 +143,10 @@
         {% endif %}
     </div>
 </div>
-{% if doc.faq %}
-{% for row in doc.faq %}
+{% if doc.faq_group %}
+{% for i in doc.faq_group %}
+{% set group = frappe.get_doc("FAQ Groups",i.faq_group_item)%}
+{% for row in group.faq_questions %}
 {% set faq = frappe.get_doc("FAQ",row.question)%}
 <div class="collapsible-item">
     <a aria-controls="id-732e168a92ce-1" aria-expanded="false" class="collapsible-title" data-toggle="collapse" href="#id-732e168a92ce-{{row.idx}}" role="button">
@@ -154,6 +166,7 @@
     </div>
 </div>
 {% endfor %}
+{% endfor %}
 {% endif %}
 <script>
     frappe.ready(() => {
@@ -169,4 +182,3 @@
     });
 </script>
 {% endblock %}
-

@@ -18,7 +18,7 @@ app_include_js = [
 ]
 # include js, css files in header of web template
 web_include_css = "/assets/kersten/css/kersten.css"
-# web_include_js = "/assets/kersten/js/kersten.js"
+web_include_js = "kerstenweb.bundle.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "kersten/public/scss/website"
@@ -31,7 +31,7 @@ web_include_css = "/assets/kersten/css/kersten.css"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Website Item" : "public/js/website_item.js"}
+# doctype_js = {"Website Item" : "public/js/website_item.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}

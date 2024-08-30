@@ -143,17 +143,17 @@ def invalidate_cache_for(doc, item_group=None):
 				if item_group_name:
 					clear_cache(frappe.db.get_value("Website Itemgroup", item_group_name, "route"))
 					
-@frappe.whitelist()
-def get_faq_questions_from_website_itemgroup(doc):
-	doc = frappe._dict(frappe.parse_json(doc))
-	faq_list = []
-	for row in doc.get('website_item_groups', []):
-		if row.get("website_itemgroup"):
-			website_itemgroup_doc = frappe.get_doc("Website Itemgroup", row['website_itemgroup'])
+# @frappe.whitelist()
+# def get_faq_questions_from_website_itemgroup(doc):
+# 	doc = frappe._dict(frappe.parse_json(doc))
+# 	faq_list = []
+# 	for row in doc.get('website_item_groups', []):
+# 		if row.get("website_itemgroup"):
+# 			website_itemgroup_doc = frappe.get_doc("Website Itemgroup", row['website_itemgroup'])
 			
-			for faq in website_itemgroup_doc.faq:
-				faq_list.append({
-					'question': faq.question,
-				})
+# 			for faq in website_itemgroup_doc.faq:
+# 				faq_list.append({
+# 					'question': faq.question,
+# 				})
 	
-	return faq_list
+# 	return faq_list

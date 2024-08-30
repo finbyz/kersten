@@ -20,12 +20,12 @@
 	>
 	{% endblock %}
     {% if doctype in ("Website Itemgroup","Website Item") %}
-	{% if doc.faq %}
+	{% if doc.faq_group %}
     <script type="application/ld+json">
         {
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          "mainEntity": [{% for row in doc.faq %}{% set faq = frappe.get_doc("FAQ",row.question)%}
+          "mainEntity": [{% for i in doc.faq_group %}{% set group = frappe.get_doc("FAQ Groups",i.faq_group_item)%}{% for row in group.faq_questions %}{% set faq = frappe.get_doc("FAQ",row.question)%}
           {
             "@type": "Question",
             "name": "{{faq.question}}",
@@ -33,13 +33,38 @@
               "@type": "Answer",
               "text": "{{faq.answer |striptags}}"
             }
-          }{% if not loop.last %},{% endif %}{% endfor %}
-          ]
+          }{% if not loop.last %},{% endif %}{% endfor %}{% if not loop.last %},{% endif %}{% endfor %}]
         }
         </script>
 		{% endif %}
     {% endif %}
-
+	
+	{% if doctype == "Website Item" %}
+	{% if shopping_cart and shopping_cart.cart_settings.enabled %}
+	{% set cart_settings = shopping_cart.cart_settings %}
+	{% set product_info = shopping_cart.product_info %}
+	{% if cart_settings.show_price and product_info.price %}
+			{% set price_info = product_info.price %}
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Product",
+			"name": "{{ doc.web_item_name }}",
+			"image": " {{"https://test.kerstenuk.com" +  doc.website_image }}",
+			"description": "{{ web_long_description|striptags or doc.description|striptags }}",
+			"sku": "{{ doc.item_code }}",
+			"offers": {
+				"@type": "Offer",
+				"priceCurrency": "{{ price_info.currency }}",
+				"price": "{{ price_info.formatted_price_sales_uom|replace(',', '')|float }}",
+				"availability": "https://schema.org/InStock",
+				"url": "window.location.href"
+			}
+		}
+		{% endif %}
+		{% endif %}
+	</script>
+	{% endif %}
 	{%- block head -%}
 		{% include "templates/includes/head.html" %}
 	{%- endblock -%}
