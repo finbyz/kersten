@@ -50,20 +50,20 @@
 			"@context": "https://schema.org",
 			"@type": "Product",
 			"name": "{{ doc.web_item_name }}",
-			"image": " {{"https://test.kerstenuk.com" +  doc.website_image }}",
-			"description": "{{ web_long_description|striptags or doc.description|striptags }}",
+			"image": " {{"https://kerstenuk.com" +  doc.website_image }}",
+			"description": "{{ doc.web_long_description | striptags or doc.description | striptags }}",
 			"sku": "{{ doc.item_code }}",
 			"offers": {
 				"@type": "Offer",
 				"priceCurrency": "{{ price_info.currency }}",
-				"price": "{{ price_info.formatted_price_sales_uom|replace(',', '')|float }}",
+				"price": "{{ price_info.price_list_rate }}",
 				"availability": "https://schema.org/InStock",
-				"url": "window.location.href"
+				"url": "https://kerstenuk.com/{{doc.route}}"
 			}
 		}
 		{% endif %}
 		{% endif %}
-	</script>
+	</scrip
 	{% endif %}
 	{%- block head -%}
 		{% include "templates/includes/head.html" %}
