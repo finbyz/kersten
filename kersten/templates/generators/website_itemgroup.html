@@ -11,6 +11,9 @@
 </style>
 {% endif %}
 <style>
+    .text-color{
+        color: black;
+    }
      @media (max-width: 768px) {
     .centered {
         position: absolute;
@@ -53,9 +56,9 @@
             <img src="{{ banner }}" alt="{{ title }}" style="opacity: 0.8; width: 100%; height:auto;" />
         </div>
         <div class="centered text-center">
-            <h1 class="title mt-0"
+            <p class="title mt-0 text-color"
                 style="text-shadow: white; font-size: 3rem;  color: 3px 3px 6px rgba(0, 0, 0, 0.4); width: 100%;">
-                {{website_itemgroup_name}}</h1>
+                {{website_itemgroup_name}}</p>
         </div>
     </div>
 </div>
