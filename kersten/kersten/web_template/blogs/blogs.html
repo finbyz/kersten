@@ -1,0 +1,21 @@
+{%- set blogslist = frappe.get_doc('Blogs', blog) -%}
+{%- set blog = blogslist.blog_list -%}
+<h3>Blogs</h3>
+<div class="row">
+  {% for row in blog %}
+  {%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}
+  <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4"> 
+    <div class="card h-100">
+      <div class="card-body">
+        {% if blogpost.custom_image %}
+          <img class="card-img-top" src="{{ blogpost.custom_image }}" alt="Card image cap">
+        {% endif %}
+        <h5 class="card-title">{{ blogpost.name | upper }}</h5> 
+        <h6 class="card-subtitle mb-2 text-muted">{{ blogpost.blogger }}</h6>
+        <p class="card-text">{{ blogpost.blog_intro }}</p>
+        <a href="/{{ blogpost.route }}" class="card-link">Link</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

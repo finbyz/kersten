@@ -1,0 +1,51 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:blog_title",
+ "creation": "2024-10-15 13:17:24.570747",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "blog_title",
+  "blog_list"
+ ],
+ "fields": [
+  {
+   "fieldname": "blog_title",
+   "fieldtype": "Data",
+   "label": "Blog Title",
+   "unique": 1
+  },
+  {
+   "fieldname": "blog_list",
+   "fieldtype": "Table MultiSelect",
+   "label": "Blog List",
+   "options": "Blog List"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-10-15 13:18:27.045149",
+ "modified_by": "Administrator",
+ "module": "kersten",
+ "name": "Blogs",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -65,6 +65,104 @@
 		{% endif %}
 	</script>
 	{% endif %}
+	
+	{% if doctype in ("Website Itemgroup","Website Item") %}
+	{% if doc.page_building_blocks %}
+	{% for row in doc.page_building_blocks %}
+	{% if row.web_template == "Blogs" %}
+	{%- set blogslist = frappe.get_doc('Blogs', blog) -%}
+	{%- set blog = blogslist.blog_list -%}
+	<script type="application/ld+json">	
+		{
+		  "@context": "https://schema.org",
+		  "@type": "BlogPosting",
+		  "headline": "{{blogslist.blog_title}}",
+		  "image":"{% for row in blog %}
+		  		{%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}
+				{% if blogpost.custom_image %}
+				{{"https://test.kerstenuk.com" +  blogpost.custom_image }}
+				{% else %}
+				{{"https://test.kerstenuk.com" +  "/files/Logo-kersten-vettore-700px (3).webp"}}{% endif %}{% if not loop.last %},{% endif %}
+				{% endfor %}",
+		  "datePublished": "{{blogslist.creation}}",
+		  "dateModified": "{{blogslist.modified}}",
+		  "author": [{% for row in blog %}
+		  			{%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}{
+			  "@type": "Person",
+			  "name": "{{blogpost.blogger}}",
+			  "url": "https://test.kerstenuk.com/{{blogpost.route}}"
+			}{% if not loop.last %},{% endif %}
+			{% endfor %}]
+		}
+		</script>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+	{% if doc.page_building_block %}
+	{% for row in doc.page_building_block %}
+	{% if row.web_template == "Blogs" %}
+	{%- set blogslist = frappe.get_doc('Blogs', blog) -%}
+	{%- set blog = blogslist.blog_list -%}
+	<script type="application/ld+json">	
+		{
+		  "@context": "https://schema.org",
+		  "@type": "BlogPosting",
+		  "headline": "{{blogslist.blog_title}}",
+		  "image":"{% for row in blog %}
+		  		{%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}
+				{% if blogpost.custom_image %}
+				{{"https://test.kerstenuk.com" +  blogpost.custom_image }}
+				{% else %}
+				{{"https://test.kerstenuk.com" +  "/files/Logo-kersten-vettore-700px (3).webp"}}{% endif %}{% if not loop.last %},{% endif %}
+				{% endfor %}",
+		  "datePublished": "{{blogslist.creation}}",
+		  "dateModified": "{{blogslist.modified}}",
+		  "author": [{% for row in blog %}
+		  			{%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}{
+			  "@type": "Person",
+			  "name": "{{blogpost.blogger}}",
+			  "url": "https://test.kerstenuk.com/{{blogpost.route}}"
+			}{% if not loop.last %},{% endif %}
+			{% endfor %}]
+		}
+		</script>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+	{% if doc.page_blocks %}
+	{% for row in doc.page_blocks %}
+	{% if row.web_template == "Blogs" %}
+	{%- set blogslist = frappe.get_doc('Blogs', blog) -%}
+	{%- set blog = blogslist.blog_list -%}
+	<script type="application/ld+json">	
+		{
+		  "@context": "https://schema.org",
+		  "@type": "BlogPosting",
+		  "headline": "{{blogslist.blog_title}}",
+		  "image":"{% for row in blog %}
+		  		{%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}
+				{% if blogpost.custom_image %}
+				{{"https://test.kerstenuk.com" +  blogpost.custom_image }}
+				{% else %}
+				{{"https://test.kerstenuk.com" +  "/files/Logo-kersten-vettore-700px (3).webp"}}{% endif %}{% if not loop.last %},{% endif %}
+				{% endfor %}",
+		  "datePublished": "{{blogslist.creation}}",
+		  "dateModified": "{{blogslist.modified}}",
+		  "author": [{% for row in blog %}
+		  			{%- set blogpost = frappe.get_doc("Blog Post", row.blog) -%}{
+			  "@type": "Person",
+			  "name": "{{blogpost.blogger}}",
+			  "url": "https://test.kerstenuk.com/{{blogpost.route}}"
+			}{% if not loop.last %},{% endif %}
+			{% endfor %}]
+		}
+		</script>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+	{% endif %}
+
+
 	{%- block head -%}
 		{% include "templates/includes/head.html" %}
 	{%- endblock -%}
