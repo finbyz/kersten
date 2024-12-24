@@ -12,5 +12,6 @@ def create_opportunity(self):
             frappe.db.commit()
         doc = frappe.get_doc("Opportunity", self.reference_name)
         doc.opportunity_type = "Sweeping"
+        doc.flags.ignore_mandatory = True
         doc.save()
         self.db_set("custom_updated", 1)
