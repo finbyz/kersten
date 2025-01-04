@@ -125,6 +125,9 @@ override_doctype_class = {
 doc_events = {
 	"Communication": {
 		"on_update": "kersten.kersten.doc_events.communication.on_update",
+	},
+	"Sales Order": {
+		"after_insert": "kersten.kersten.doc_events.sales_order.after_insert",
 	}
 }
 
@@ -149,8 +152,7 @@ doc_events = {
 #	],
 # }
 fixtures = [
-    {"dt": "Custom Field"},
-    {"dt": "Property Setter","filters": [["module", "=","kersten"]]}
+    {"dt": "Custom Field","filters": [["module", "=","kersten"]]},
 ]
 # Testing
 # -------
@@ -168,9 +170,9 @@ override_whitelisted_methods = {
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
-# override_doctype_dashboards = {
-#	"Task": "kersten.task.get_dashboard_data"
-# }
+override_doctype_dashboards = {
+	"Opportunity": "kersten.kersten.doc_events.sales_order_dashboard.get_data"
+}
 
 # exempt linked doctypes from being automatically cancelled
 #
