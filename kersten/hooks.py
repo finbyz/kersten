@@ -15,6 +15,7 @@ app_license = "MIT"
 # app_include_js = "/assets/kersten/js/kersten.js"
 app_include_js = [
 	"kersten.bundle.js",
+    
 ]
 # include js, css files in header of web template
 web_include_css = "/assets/kersten/css/kersten.css"
@@ -31,10 +32,18 @@ web_include_js = "kerstenweb.bundle.js"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Quotation" : "public/js/quotation.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+doctype_js = {"Quotation" : "public/js/quotation.js",
+			"Task": "public/js/task_management/doctype_js/task.js",
+            "Opportunity" : "public/js/opportunity.js",
+            "Meeting" : "public/js/meeting.js",
+}
+doctype_list_js = {
+    "Task": "public/js/task_management/list_js/task.js",
+}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+doctype_calendar_js = {
+    "Task": "public/js/task_management/task_calendar.js",
+}
 
 # Home Pages
 # ----------
@@ -116,6 +125,9 @@ override_doctype_class = {
 	"Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
     "Website Item": "kersten.kersten.override.website_item.WebsiteItem",  
     "Assignment Rule": "kersten.kersten.override.doctype.assignment_rule.AssignmentRule", 
+	"Task":"kersten.task_management.override.doctype.task.Task",
+	"Notification":"kersten.task_management.override.doctype.notification.Notification",
+	"Auto Repeat":"kersten.task_management.override.doctype.auto_repeat.AutoRepeat"
 }
 
 # Document Events
@@ -128,6 +140,9 @@ doc_events = {
 	},
 	"Sales Order": {
 		"after_insert": "kersten.kersten.doc_events.sales_order.after_insert",
+	},
+    "Meeting": {
+        "on_submit": "kersten.kersten.doc_events.meeting.create_tasks_from_meeting",
 	}
 }
 

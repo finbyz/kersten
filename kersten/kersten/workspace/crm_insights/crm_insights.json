@@ -1,0 +1,96 @@
+{
+ "charts": [
+  {
+   "chart_name": "Incoming Opportunity",
+   "label": "Incoming Opportunity"
+  },
+  {
+   "chart_name": "Customer territory",
+   "label": "Customer territory"
+  },
+  {
+   "chart_name": "Won Opportunities",
+   "label": "Won Opportunities"
+  },
+  {
+   "chart_name": "Opportunity Trends",
+   "label": "Opportunity Trends"
+  },
+  {
+   "chart_name": "Territory Wise Opportunity Count",
+   "label": "Territory Wise Opportunity Count"
+  },
+  {
+   "chart_name": "Opportunities via Campaigns",
+   "label": "Opportunities via Campaigns"
+  },
+  {
+   "chart_name": "Territory Wise Sales",
+   "label": "Territory Wise Sales"
+  }
+ ],
+ "content": "[{\"id\":\"I3e8TeHX_d\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>CRM INSIGHTS</b></span>\",\"col\":12}},{\"id\":\"P0ouIjXlUp\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"New Customer (Last 1 Month)\",\"col\":4}},{\"id\":\"aLz8utmf1K\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"New Opportunity (Last 1 Month)\",\"col\":4}},{\"id\":\"GqnBEmFhlh\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Won Opportunity (Last 1 Month)\",\"col\":4}},{\"id\":\"jHPvIf7MWx\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"New Customer(Last 1 Week)\",\"col\":4}},{\"id\":\"5rCxssy6YN\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"New Opportunity(Last 1 Week)\",\"col\":4}},{\"id\":\"h6nWKQEuct\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Won Opportunity(Last 1 Week)\",\"col\":4}},{\"id\":\"ZFR5pl_AsH\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Open Opportunity\",\"col\":4}},{\"id\":\"_51SjtYA1K\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"New Customer (This Month)\",\"col\":4}},{\"id\":\"j6jNwEMWTx\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Incoming Opportunity\",\"col\":12}},{\"id\":\"MjLAKw1kXD\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Opportunity Trends\",\"col\":12}},{\"id\":\"-mUVUvzUSj\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Won Opportunities\",\"col\":12}},{\"id\":\"VE9fxwPeMt\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Territory Wise Opportunity Count\",\"col\":6}},{\"id\":\"8t6IVf77XU\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Opportunities via Campaigns\",\"col\":6}},{\"id\":\"Qj9P5vEhUa\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Territory Wise Sales\",\"col\":12}},{\"id\":\"eaF0DqW06p\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Customer territory\",\"col\":12}},{\"id\":\"KuUj8e9lZh\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Opportunity Block\",\"col\":12}}]",
+ "creation": "2025-04-10 09:36:50.000217",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Opportunity Block",
+   "label": "Opportunity Block"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "dashboard",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "CRM INSIGHTS",
+ "links": [],
+ "modified": "2025-04-11 06:48:53.939331",
+ "modified_by": "Administrator",
+ "module": "kersten",
+ "name": "CRM INSIGHTS",
+ "number_cards": [
+  {
+   "label": "New Customer (This Month)",
+   "number_card_name": "New Lead (This Month)"
+  },
+  {
+   "label": "New Customer (Last 1 Month)",
+   "number_card_name": "New Lead (Last 1 Month)"
+  },
+  {
+   "label": "New Opportunity (Last 1 Month)",
+   "number_card_name": "New Opportunity (Last 1 Month)"
+  },
+  {
+   "label": "New Customer(Last 1 Week)",
+   "number_card_name": "New Lead(Last 1 Week)"
+  },
+  {
+   "label": "Won Opportunity (Last 1 Month)",
+   "number_card_name": "Won Opportunity (Last 1 Month)"
+  },
+  {
+   "label": "New Opportunity(Last 1 Week)",
+   "number_card_name": "New Opportunity(Last 1 Week)"
+  },
+  {
+   "label": "Won Opportunity(Last 1 Week)",
+   "number_card_name": "Won Opportunity(Last 1 Week)"
+  },
+  {
+   "label": "Open Opportunity",
+   "number_card_name": "Open Opportunity"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 39.0,
+ "shortcuts": [],
+ "title": "CRM INSIGHTS"
+}

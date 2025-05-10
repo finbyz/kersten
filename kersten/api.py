@@ -12,7 +12,46 @@ from webshop.webshop.doctype.webshop_settings.webshop_settings import (
 	get_shopping_cart_settings,
 )
 # from erpnext.utilities.product import get_web_item_qty_in_stock
+@frappe.whitelist()
+def get_contact_list(txt, page_length=20, extra_filters: str | None = None) -> list[dict]:
+	"""Return email ids for a multiselect field."""
+	frappe.throw("hello")
+	if extra_filters:
+		extra_filters = frappe.parse_json(extra_filters)
 
+	filters = [
+		["Contact Email", "email_id", "is", "set"],
+	]
+	if extra_filters:
+		filters.extend(extra_filters)
+
+	fields = ["first_name", "middle_name", "last_name", "company_name"]
+	contacts = frappe.get_list(
+		"Contact",
+		fields=["full_name", "`tabContact Email`.email_id","user"],
+		filters=filters,
+		or_filters=[[field, "like", f"%{txt}%"] for field in fields]
+		+ [["Contact Email", "email_id", "like", f"%{txt}%"]],
+		limit_page_length=page_length,
+	)
+	filtered_contacts = []
+	for contact in contacts:
+		if contact.user:
+			if frappe.db.get_value("User", contact.user, "enabled") == 1:
+				filtered_contacts.append(contact)
+		else:
+			filtered_contacts.append(contact)
+	# The multiselect field will store the `label` as the selected value.
+	# The `value` is just used as a unique key to distinguish between the options.
+	# https://github.com/frappe/frappe/blob/6c6a89bcdd9454060a1333e23b855d0505c9ebc2/frappe/public/js/frappe/form/controls/autocomplete.js#L29-L35
+	return [
+		frappe._dict(
+			value=d.email_id,
+			label=d.email_id,
+			description=d.full_name,
+		)
+		for d in filtered_contacts
+	]
 def add_comment(reference_doctype: str, reference_name: str, content: str, comment_email: str, comment_by: str):
 	reference_doc = frappe.get_doc(reference_doctype, reference_name)
 
@@ -186,3 +225,68 @@ def get_product_filter_data(query_args=None):
 		"sub_categories": sub_categories,
 		"items_count": result["items_count"],
 	}
+
+@frappe.whitelist()
+def fetch_data():
+    try:
+        data = []
+        # records = frappe.get_all('Opportunity', filters={"status": "Open"}, fields=["party_name","name"])
+        records = frappe.get_all('Opportunity', filters=[["status", "not in", ["Closed", "Converted", "Lost"]]], fields=["party_name","title","name"])
+        for record in records:
+            children = frappe.get_all('CRM Note', filters={"parent": record.name}, fields=["*"], order_by='added_on desc',limit_page_length=1)
+            for child in children:
+                data.append({
+                    "opportunity_val": record.name,
+                    "party_name": record.title,
+                    "note": child.note,
+                    "date":child.added_on
+                })
+        return data
+    except Exception as e:
+        frappe.throw(f"An error occurred: {str(e)}")
+
+@frappe.whitelist()
+def get_dealer_contact(custom_dealer):
+
+	result = frappe.db.sql('''
+						SELECT phone from `tabAddress`
+					 	where address_title = %s
+					 ''',(custom_dealer))
+	return result
+	
+@frappe.whitelist()
+def get_contact_details(custom_dealer):
+	
+	result = frappe.db.sql('''
+						select `tabContact`.name,`tabContact`.email_id,`tabContact`.phone,
+						`tabDynamic Link`.link_name from `tabContact`, `tabDynamic Link` 
+						where `tabDynamic Link`.link_doctype = 'Customer' 
+						and (`tabDynamic Link`.link_name= %s) 
+						and `tabContact`.name = `tabDynamic Link`.parent;
+					 ''',(custom_dealer))
+	return result
+
+@frappe.whitelist()
+def get_contact_data(custom_dealer):
+	
+	result = frappe.db.sql('''
+						select `tabContact`.name,`tabContact`.email_id,`tabContact`.phone,
+						`tabDynamic Link`.link_name from `tabContact`, `tabDynamic Link` 
+						where `tabDynamic Link`.link_doctype = 'Customer' 
+						and (`tabDynamic Link`.link_name= %s) 
+						and `tabContact`.name = `tabDynamic Link`.parent;
+					 ''',(custom_dealer))
+	return result
+
+@frappe.whitelist()
+def get_contact(custom_dealer,custom_dealer_contact):
+	
+	result = frappe.db.sql('''
+						select `tabContact`.phone,`tabContact`.email_id
+						from `tabContact`, `tabDynamic Link` 
+						where `tabDynamic Link`.link_doctype = 'Customer' 
+					and `tabContact`.name = `tabDynamic Link`.parent						
+					and (`tabDynamic Link`.link_name= %s) 
+						and `tabContact`.name = %s;
+					 ''',(custom_dealer,custom_dealer_contact))
+	return result
