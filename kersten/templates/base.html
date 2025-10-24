@@ -65,7 +65,15 @@
 		{% endif %}
 	</script>
 	{% endif %}
-	
+	<script>
+  // Save current page URL before leaving it
+	window.addEventListener('beforeunload', () => {
+		try {
+		sessionStorage.setItem('lastVisited', window.location.href);
+		} catch (e) {}
+	});
+	</script>
+
 	{% if doctype in ("Website Itemgroup","Website Item") %}
 	{% if doc.page_building_blocks %}
 	{% for row in doc.page_building_blocks %}
