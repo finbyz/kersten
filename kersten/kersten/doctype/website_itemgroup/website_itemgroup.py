@@ -154,22 +154,26 @@ def get_super_child_groups_for_website(item_group_name, immediate=False, include
 
     while stack:
         parent_name = stack.pop()
-        children = frappe.db.sql(f"""
-            SELECT 
-                DISTINCT wi.name, wi.route, wi.image
-            FROM
-                `tabWebsite Itemgroup` wi
-                JOIN `tabWebsite Item Group` wig ON wi.name = wig.website_itemgroup 
-                JOIN `tabWebsite Item` wia ON wig.parent = wia.name
-            WHERE
-                {filters_condition} AND wi.parent_website_itemgroup = %s AND wi.is_group = 1
-            GROUP BY
-                wi.weightage DESC, wi.name ASC
-        """, params + [parent_name], as_dict=True)
+        children = frappe.db.sql(
+			"""
+				SELECT 
+					DISTINCT wi.name, wi.route, wi.image
+				FROM
+					`tabWebsite Itemgroup` wi
+					JOIN `tabWebsite Item Group` wig ON wi.name = wig.website_itemgroup 
+					JOIN `tabWebsite Item` wia ON wig.parent = wia.name
+				WHERE
+					wi.parent_website_itemgroup = %s AND wi.is_group = 1
+				ORDER BY
+					wi.weightage DESC, wi.name ASC
+			""",
+			(parent_name,),
+			as_dict=True
+		)
         child_groups.extend(children)
         if not immediate:
             stack.extend(child['name'] for child in children)
-
+	
     return child_groups
 
 def get_item_for_list_in_html(context):
