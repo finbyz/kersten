@@ -64,7 +64,7 @@
 		{% endif %}
 	</div>
 	{% else %}
-		{{ product_image(doc.website_image, alt=doc.website_image_alt or doc.item_name, image_class="rounded-4") }}
+		{{ product_image(doc.website_image, '', doc.website_image_alt or doc.item_name) }}
 	{% endif %}
 
 	<!-- Simple image preview -->
