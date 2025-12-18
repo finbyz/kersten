@@ -32,10 +32,14 @@ web_include_js = "kerstenweb.bundle.js"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Quotation" : "public/js/quotation.js",
-			"Task": "public/js/task_management/doctype_js/task.js",
-            "Opportunity" : "public/js/opportunity.js",
-            "Meeting" : "public/js/meeting.js",
+doctype_js = {
+	"Quotation": "public/js/quotation.js",
+	# "Sales Order": "public/js/sales_order.js",
+	"Task": "public/js/task_management/doctype_js/task.js",
+	"Opportunity": "public/js/opportunity.js",
+	"Meeting": "public/js/meeting.js",
+	"Customer": "public/js/customer.js",
+	"Supplier": "public/js/supplier.js",
 }
 doctype_list_js = {
     "Task": "public/js/task_management/list_js/task.js",
@@ -143,7 +147,11 @@ doc_events = {
 	},
     "Meeting": {
         "on_submit": "kersten.kersten.doc_events.meeting.create_tasks_from_meeting",
-	}
+        # "on_submit": "kersten.kersten.doc_events.meeting.create_event_on_meeting_submit",
+	},
+    # "Meeting Schedule": {
+    #     "after_insert": "kersten.kersten.doc_events.meeting_schedule.create_event_on_meeting_schedule",
+	# }
 }
 
 # Scheduled Tasks
