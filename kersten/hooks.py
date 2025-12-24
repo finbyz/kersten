@@ -127,7 +127,8 @@ doctype_calendar_js = {
 
 override_doctype_class = {
 	"Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
-    "Website Item": "kersten.kersten.override.website_item.WebsiteItem",  
+    "Website Item": "kersten.kersten.override.website_item.WebsiteItem", 
+    "Blog Post":"kersten.kersten.override.blog_post.BlogPost",
     "Assignment Rule": "kersten.kersten.override.doctype.assignment_rule.AssignmentRule", 
 	"Task":"kersten.task_management.override.doctype.task.Task",
 	"Notification":"kersten.task_management.override.doctype.notification.Notification",
@@ -149,6 +150,20 @@ doc_events = {
         "on_submit": "kersten.kersten.doc_events.meeting.create_tasks_from_meeting",
         # "on_submit": "kersten.kersten.doc_events.meeting.create_event_on_meeting_submit",
 	},
+	"Delivery Note": {
+		"on_cancel": "kersten.kersten.doc_events.delivery_note.on_cancel",
+		"on_submit": "kersten.kersten.doc_events.delivery_note.on_submit",
+	},
+    "Purchase Receipt": {
+		"on_cancel": "kersten.kersten.doc_events.purchase_receipt.on_cancel",
+		"on_submit": "kersten.kersten.doc_events.purchase_receipt.on_submit",
+	},
+	"Purchase Invoice": {
+		"on_cancel": "kersten.kersten.doc_events.purchase_invoice.on_cancel",
+        "on_submit": "kersten.kersten.doc_events.purchase_invoice.on_submit",
+	}
+
+
     # "Meeting Schedule": {
     #     "after_insert": "kersten.kersten.doc_events.meeting_schedule.create_event_on_meeting_schedule",
 	# }
