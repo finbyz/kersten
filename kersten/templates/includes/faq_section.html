@@ -1,0 +1,32 @@
+{# FAQ Section - Reusable FAQ accordion for any doctype with faq_group field #}
+{% if doc.faq_group %}
+<div class="faq-section mt-5">
+    <h3 class="mb-4">{{ _("Frequently Asked Questions") }}</h3>
+    {% for i in doc.faq_group %}
+    {% set group = frappe.get_doc("FAQ Groups", i.faq_group_item) %}
+    {% for row in group.faq_questions %}
+    {% set faq = frappe.get_doc("FAQ", row.question) %}
+    <div class="collapsible-item">
+        <a aria-controls="faq-{{ loop.index0 }}-{{ i.idx }}" aria-expanded="false" class="collapsible-title"
+            data-toggle="collapse" href="#faq-{{ loop.index0 }}-{{ i.idx }}" role="button">
+            <div class="collapsible-item-title">{{ faq.question }}</div>
+            <svg class="collapsible-icon" height="24" viewBox="0 0 16 16" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path class="vertical" d="M8 4V12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" stroke-width="1.5"></path>
+                <path class="horizontal" d="M4 8H12" stroke="currentColor" stroke-linecap="round"
+                    stroke-faq_section.htmllinejoin="round" stroke-miterlimit="10" stroke-width="1.5"></path>
+            </svg>
+        </a>
+        <div class="collapse collapsible-content from-markdown" id="faq-{{ loop.index0 }}-{{ i.idx }}">
+            <div>
+                <p>{{ faq.answer }}</p>
+                {% if faq.related_title and faq.related_url %}
+                <i><a href="{{ faq.related_url or '#' }}">{{ faq.related_title }}</a></i>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+</div>
+{% endif %}
