@@ -17,7 +17,7 @@
 	<link rel="shortcut icon" href="{{ (favicon or " /assets/frappe/images/frappe-favicon.svg") | abs_url }}"
 		type="image/x-icon">
 	{% endblock %}
-	{% if doctype in ("Website Itemgroup", "Website Item", "Blog Post", "Web Page") %}
+	{% if doctype in ("Website Itemgroup", "Website Item", "Blog Post", "Web Page") and doc %}
 	{% if doc.faq_group %}
 	<script type="application/ld+json">
         {
