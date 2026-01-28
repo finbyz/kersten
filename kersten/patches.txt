@@ -1,2 +1,3 @@
 [pre_model_sync]
+kersten_ai_seo.patches.rename_meta_image
 [post_model_sync]
