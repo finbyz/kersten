@@ -40,6 +40,7 @@ doctype_js = {
 	"Meeting": "public/js/meeting.js",
 	"Customer": "public/js/customer.js",
 	"Supplier": "public/js/supplier.js",
+	"Website Item": "public/js/website_item.js",
 }
 doctype_list_js = {
     "Task": "public/js/task_management/list_js/task.js",

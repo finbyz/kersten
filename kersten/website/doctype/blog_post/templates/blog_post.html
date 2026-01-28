@@ -5,9 +5,9 @@
 <div class="blog-container">
 
 	<article class="blog-content" itemscope itemtype="http://schema.org/BlogPosting">
-			{% block meta_block %}
-	{% include "templates/includes/meta_block.html" %}
-	{% endblock %}
+		{% block meta_block %}
+		{% include "templates/includes/meta_block.html" %}
+		{% endblock %}
 		<!-- begin blog content -->
 		<div class="blog-header">
 			<!-- <div>
@@ -28,33 +28,39 @@
 			</div>
 		</div>
 		<hr class="my-5">
+		{% if custom_image %}
+		<div class="blog-hero-image mb-4">
+			<img src="{{ custom_image }}" alt="{{ title }}" class="img-fluid rounded"
+				style="width: 100%; max-height: 700px; object-fit: cover;">
+		</div>
+		{% endif %}
 		<div itemprop="articleBody" class="from-markdown">
 			{{ content }}
 		</div>
 		<!-- end blog content -->
 	</article>
 	{%- if enable_cta -%}
-		{{ web_block(
-			"Section With Small CTA",
-			values=cta,
-			add_container=0,
-			add_top_padding=0,
-			add_bottom_padding=0,
-			css_class="my-5"
-		) }}
+	{{ web_block(
+	"Section With Small CTA",
+	values=cta,
+	add_container=0,
+	add_top_padding=0,
+	add_bottom_padding=0,
+	css_class="my-5"
+	) }}
 	{%- endif -%}
 	<div class="blog-footer">
 		<div class="blog-feedback">
 			{% if not disable_likes %}
-				{% include 'templates/includes/likes/likes.html' %}
+			{% include 'templates/includes/likes/likes.html' %}
 			{% endif %}
 		</div>
 		{% if social_links %}
-			<div>
-				{% for link in social_links %}
-					<a href="{{ link.link }}" class="text-muted ml-2 fa fa-{{ link.icon }}" target="_blank"></a>
-				{% endfor %}
-			</div>
+		<div>
+			{% for link in social_links %}
+			<a href="{{ link.link }}" class="text-muted ml-2 fa fa-{{ link.icon }}" target="_blank"></a>
+			{% endfor %}
+		</div>
 		{% endif %}
 		<div>
 			{{ _('Published on') }} <time datetime="{{ published_on }}">{{ frappe.format_date(published_on) }}</time>
@@ -62,14 +68,14 @@
 	</div>
 
 	{% if blogger_info %}
-		<hr class="mt-2 mb-5">
-		{% include "templates/includes/blog/blogger.html" %}
+	<hr class="mt-2 mb-5">
+	{% include "templates/includes/blog/blogger.html" %}
 	{% endif %}
 
 	{% if not disable_comments %}
-		<div class="blog-comments">
-			{% include 'templates/includes/comments/comments.html' %}
-		</div>
+	<div class="blog-comments">
+		{% include 'templates/includes/comments/comments.html' %}
+	</div>
 	{% endif %}
 
 </div>
