@@ -1,12 +1,70 @@
-.btn-primary{
-    background-color:#E44D2E !important;
+.btn-primary {
+    background-color: #E44D2E !important;
 }
-.navbar{
+
+.navbar {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
 :root {
     --green-info: #38A160;
     --product-bg-color: white;
     --body-bg-color: white;
-  }
+}
+
+/* Fix for App Icon Alignment and Centering - Scoped to /apps page */
+body[data-path="apps"] .container {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 80vh !important;
+    /* Centered in viewable area */
+    margin: 0 auto !important;
+}
+
+body[data-path="apps"] .apps-container {
+    background: transparent !important;
+    border: none !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+body[data-path="apps"] .apps {
+    display: grid !important;
+    gap: 40px !important;
+    justify-items: center !important;
+    align-items: center !important;
+    width: auto !important;
+    /* Don't stretch across screen */
+    margin: 0 auto !important;
+}
+
+body[data-path="apps"] .app-logo {
+    width: 100px !important;
+    /* Slightly larger for better look */
+    height: 100px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 20px !important;
+    background: #fff !important;
+}
+
+body[data-path="apps"] .app-logo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    /* Keep icon aspects */
+    padding: 10px !important;
+}
+
+body[data-path="apps"] .app-title {
+    margin-top: 10px !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+}
