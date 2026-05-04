@@ -21,3 +21,28 @@ def create_tasks_from_meeting(doc, method):
 
 	frappe.db.commit()
 		
+
+
+def create_event_on_meeting_submit(doc, method):
+    doc = frappe.get_doc(doc)
+    
+    frappe.get_doc({    
+        "doctype": "Event",
+        "subject": f"Meeting: {doc.party}",
+        "description": doc.discussion or "Meeting",
+        "event_category": "Meeting",  # ✅ missing comma fixed
+        "starts_on": doc.meeting_from,
+        "ends_on": doc.meeting_to,
+        "event_type": "Private",
+        "reference_type": "Meeting",
+        "reference_name": doc.name,
+        "all_day": 0,
+        "owner": doc.owner,
+        "event_participants": [
+            {
+                "reference_doctype": doc.party_type,
+                "reference_docname": doc.party
+            }
+            
+        ]
+    }).insert(ignore_permissions=True)

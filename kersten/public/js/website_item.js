@@ -1,3 +1,6 @@
+// Website Item JS - Non-SEO/FAQ functionality only
+// SEO and FAQ buttons moved to kersten_ai_seo app
+
 // frappe.ui.form.on('Website Item', {
 //     custom_get_faq_questions: function(frm) {
 //         frappe.call({
@@ -8,7 +11,7 @@
 //             callback: function(r) {
 //                 frm.clear_table('faq');
 //                 if (r.message) {
-                    
+
 //                     r.message.forEach(function(faq) {
 //                         let row = frm.set_value("faq_group");
 //                         row.question = faq.question;

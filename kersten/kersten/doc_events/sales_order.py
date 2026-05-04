@@ -11,3 +11,11 @@ def after_insert(self, method):
             copy_comments("Quotation", row.prevdoc_docname, self)
             link_communications("Quotation", row.prevdoc_docname, self)
             processed_docs.add(row.prevdoc_docname)
+
+
+@frappe.whitelist()
+def link_sales_order_to_opportunity(sales_order, opportunity):
+    sales_order_doc = frappe.get_doc("Sales Order", sales_order)
+    for row in sales_order_doc.items:
+        row.db_set("opportunity", opportunity)
+    return f'Sales Order {sales_order} linked to Opportunity <a href="#Form/Opportunity/{opportunity}">{opportunity}</a>'
