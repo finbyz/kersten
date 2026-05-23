@@ -38,29 +38,65 @@
 	{% endif %}
 
 	{% if doctype == "Website Item" %}
-	{% if shopping_cart and shopping_cart.cart_settings.enabled %}
-	{% set cart_settings = shopping_cart.cart_settings %}
-	{% set product_info = shopping_cart.product_info %}
-	{% if cart_settings.show_price and product_info.price %}
-	{% set price_info = product_info.price %}
+	{% set cart_settings = (shopping_cart.cart_settings if shopping_cart else {}) %}
+	{% set product_info = (shopping_cart.product_info if shopping_cart else {}) %}
+	{% set price_info = (product_info.price if product_info else {}) %}
+	{% set product_name = (doc.web_item_name or doc.item_name or doc.item_code) | escape %}
+	{% set product_description = (doc.web_long_description or doc.description or "") | striptags | truncate(160) | escape %}
+	{% set site_url = frappe.utils.get_url() %}
+
 	<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "Product",
-			"name": "{{ doc.web_item_name }}",
-			"image": "{% if doc.website_image %}{{"https://kerstenuk.com" +  doc.website_image }}{% else %}{{"https://kerstenuk.com" +  "/files/Logo-kersten-vettore-700px (3).webp"}}{% endif %}",
-			"description": "{{ doc.web_long_description | striptags or doc.description | striptags }}",
-			"sku": "{{ doc.item_code }}",
-			"offers": {
-				"@type": "Offer",
-				"priceCurrency": "{{ price_info.currency }}",
-				"price": "{{ price_info.price_list_rate }}",
-				"availability": "https://schema.org/InStock",
-				"url": "https://kerstenuk.com/{{doc.route}}"
-			}
+	{
+		"@context": "https://schema.org",
+		"@type": "Product",
+		"name": "{{ product_name }}",
+		"image": "{% if doc.website_image %}{{ site_url ~ doc.website_image }}{% else %}{{ site_url ~ "/files/Logo-kersten-vettore-700px (3).webp" }}{% endif %}",
+		"description": "{{ product_description or product_name }}",
+		"sku": "{{ doc.item_code | escape }}",
+		"mpn": "{{ doc.item_code | escape }}",
+		"brand": {
+			"@type": "Brand",
+			"name": "{{ (doc.brand or 'Kersten UK') | escape }}"
+		},
+		"model": "{{ (doc.get('model_number') or doc.item_code) | escape }}",
+		{% if average_rating -%}
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "{{ average_rating }}",
+			"reviewCount": "{{ total_reviews or 0 }}"
+		},
+		{%- endif %}
+		"offers": {
+			"@type": "Offer",
+			"url": "{{ site_url ~ '/' ~ doc.route }}",
+			"priceCurrency": "{{ price_info.currency or 'GBP' }}",
+			"price": "{{ price_info.price_list_rate or '0.00' }}",
+			"itemCondition": "https://schema.org/NewCondition",
+			"availability": "https://schema.org/{% if product_info.in_stock or cart_settings.allow_items_not_in_stock or not cart_settings.show_stock_availability %}InStock{% elif product_info.on_backorder %}BackOrder{% else %}OutOfStock{% endif %}"
 		}
-		{% endif %}
-		{% endif %}
+		{%- if reviews -%},
+		"review": [
+			{% for review in reviews -%}
+			{
+				"@type": "Review",
+				"author": {
+					"@type": "Person",
+					"name": "{{ (frappe.db.get_value('User', review.user, 'full_name') or review.user or 'Anonymous') | escape }}"
+				},
+				"datePublished": "{{ review.creation.strftime('%Y-%m-%d') if review.creation else '' }}",
+				"reviewBody": "{{ (review.comment or '') | striptags | escape }}",
+				"name": "{{ (review.review_title or '') | escape }}",
+				"reviewRating": {
+					"@type": "Rating",
+					"bestRating": "5",
+					"ratingValue": "{{ (review.rating or 0) * 5 }}",
+					"worstRating": "1"
+				}
+			}{{ "," if not loop.last else "" }}
+			{%- endfor %}
+		]
+		{%- endif %}
+	}
 	</script>
 	{% endif %}
 	<script>

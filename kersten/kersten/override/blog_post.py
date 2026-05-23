@@ -1,5 +1,5 @@
 import frappe
-from frappe.website.doctype.blog_post.blog_post import BlogPost as _BlogPost
+from blog.blog.doctype.blog_post.blog_post import BlogPost as _BlogPost
 from frappe.utils import (
 	cint,
 	get_fullname,
@@ -67,3 +67,6 @@ class BlogPost(_BlogPost):
 			{"label": context.category.title, "route": context.category.route},
 		]
 		context.guest_allowed = frappe.db.get_single_value("Blog Settings", "allow_guest_to_comment")
+
+		# Pass custom_image field to template context
+		context.custom_image = self.custom_image if self.custom_image else None
