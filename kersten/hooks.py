@@ -41,6 +41,7 @@ doctype_js = {
 	"Customer": "public/js/customer.js",
 	"Supplier": "public/js/supplier.js",
 	"Website Item": "public/js/website_item.js",
+	"Communication": "public/js/communication.js",
 }
 doctype_list_js = {
     "Task": "public/js/task_management/list_js/task.js",
@@ -203,7 +204,7 @@ fixtures = [
 #
 override_whitelisted_methods = {
 	"webshop.webshop.api.get_product_filter_data": "kersten.api.get_product_filter_data",
-	"erpnext.crm.doctype.opportunity.opportunity.make_opportunity_from_communication": "kersten.kersten.override.whitelisted_method.opportunity.make_opportunity_from_communication"
+	"erpnext.crm.doctype.opportunity.opportunity.make_opportunity_from_communication": "kersten.kersten.override.whitelisted_method.opportunity.make_opportunity_from_communication",
 }
 #
 # each overriding function accepts a `data` argument;
