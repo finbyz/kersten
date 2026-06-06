@@ -102,6 +102,9 @@ def create_lead_for_item_inquiry(lead, subject, message):
 		doc.party_name = contact_data[0].link_name
 		doc.contact_mobile = phone
 		doc.contact_email = sender
+		# Set the contact display name from the submitted form so it doesn't fall back to "John Doe"
+		doc.contact_person = contact_data[0].name
+		doc.contact_display = fullname
 		doc.save(ignore_permissions = True)
 		
 		add_comment("Opportunity" , doc.name , content=message , comment_email = sender, comment_by = None)
@@ -111,12 +114,33 @@ def create_lead_for_item_inquiry(lead, subject, message):
 											  Where ce.email_id = '{sender}'
 											""",as_dict = 1)
 	if not contact_but_no_customer:
+		# Use company_name if provided, otherwise fall back to fullname (lead_name is always required)
+		customer_display_name = company_name if company_name else fullname
+
 		customer = frappe.new_doc("Customer")
-		customer.customer_name=company_name
-		customer.customer_type="Company"
-		customer.customer_group="Account Sales"
-		customer.territory="All Territories"
-		customer.save(ignore_permissions = True)
+		customer.customer_name = customer_display_name
+		customer.customer_type = "Company" if company_name else "Individual"
+		customer.customer_group = "Account Sales"
+		customer.territory = "All Territories"
+		customer.save(ignore_permissions=True)
+
+		contact = frappe.new_doc("Contact")
+		contact.first_name = fullname
+		contact.email_id = sender
+		contact.mobile_no = phone
+		contact.append("email_ids", {
+			"email_id": sender,
+			"is_primary": 1
+		})
+		contact.append("links", {
+			"link_doctype": "Customer",
+			"link_name": customer.name
+		})
+		contact.append("phone_nos", {
+			"phone": phone,
+			"is_primary_phone": 1
+		})
+		contact.save(ignore_permissions=True)
 
 		opportunity = frappe.new_doc("Opportunity")
 		opportunity.opportunity_from = "Customer"
@@ -124,27 +148,14 @@ def create_lead_for_item_inquiry(lead, subject, message):
 		opportunity.contact_email = sender
 		opportunity.contact_mobile = phone
 		opportunity.source = ""
-		opportunity.save(ignore_permissions = True)
-		frappe.db.set_value("Customer" , customer.name , 'opportunity_name' , opportunity.name , update_modified=False)
-		add_comment(reference_doctype = "Opportunity", reference_name=opportunity.name, content = message, comment_email=sender, comment_by = frappe.session.user)
+		# Set contact person and display name from the submitted form
+		opportunity.contact_person = contact.name
+		opportunity.contact_display = fullname
+		opportunity.save(ignore_permissions=True)
 
-		contact = frappe.new_doc("Contact")
-		contact.first_name = fullname
-		contact.email_id = sender
-		contact.mobile_no = phone
-		contact.append("email_ids",{
-			"email_id":sender,
-			"is_primary":1
-		})
-		contact.append("links",{
-			"link_doctype":"Customer",
-			"link_name":customer.name
-		})
-		contact.append("phone_nos",{
-			"phone":phone,
-			"is_primary_phone":1
-		})
-		contact.save(ignore_permissions=True)
+		frappe.db.set_value("Customer", customer.name, 'opportunity_name', opportunity.name, update_modified=False)
+		add_comment(reference_doctype="Opportunity", reference_name=opportunity.name, content=message, comment_email=sender, comment_by=frappe.session.user)
+
 	frappe.msgprint("Thank you for reaching out to us. We will get back to you at the earliest.")
 
 import json
