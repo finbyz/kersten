@@ -15,7 +15,6 @@ from webshop.webshop.doctype.webshop_settings.webshop_settings import (
 @frappe.whitelist()
 def get_contact_list(txt, page_length=20, extra_filters: str | None = None) -> list[dict]:
 	"""Return email ids for a multiselect field."""
-	frappe.throw("hello")
 	if extra_filters:
 		extra_filters = frappe.parse_json(extra_filters)
 
@@ -90,11 +89,11 @@ def create_lead_for_item_inquiry(lead, subject, message):
 				subject=subject, message=message
 			)
 
-	contact_data = frappe.db.sql(f""" Select co.name , dl.link_name From `tabContact` as co
+	contact_data = frappe.db.sql(""" Select co.name , dl.link_name From `tabContact` as co
 											  Left join `tabContact Email` as ce ON ce.parent = co.name
 											  left join `tabDynamic Link` as dl ON dl.parent = co.name
-											  Where ce.email_id = '{sender}' and dl.link_doctype = "Customer" 
-											""",as_dict = 1)
+											  Where ce.email_id = %s and dl.link_doctype = 'Customer'
+											""", (sender,), as_dict=1)
 
 	if contact_data:
 		doc = frappe.new_doc("Opportunity")
@@ -109,10 +108,10 @@ def create_lead_for_item_inquiry(lead, subject, message):
 		
 		add_comment("Opportunity" , doc.name , content=message , comment_email = sender, comment_by = None)
 
-	contact_but_no_customer = frappe.db.sql(f""" Select co.name  From `tabContact` as co
+	contact_but_no_customer = frappe.db.sql(""" Select co.name  From `tabContact` as co
 											  Left join `tabContact Email` as ce ON ce.parent = co.name
-											  Where ce.email_id = '{sender}'
-											""",as_dict = 1)
+											  Where ce.email_id = %s
+											""", (sender,), as_dict=1)
 	if not contact_but_no_customer:
 		# Use company_name if provided, otherwise fall back to fullname (lead_name is always required)
 		customer_display_name = company_name if company_name else fullname
