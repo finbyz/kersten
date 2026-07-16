@@ -205,6 +205,7 @@ fixtures = [
 override_whitelisted_methods = {
 	"webshop.webshop.api.get_product_filter_data": "kersten.api.get_product_filter_data",
 	"erpnext.crm.doctype.opportunity.opportunity.make_opportunity_from_communication": "kersten.kersten.override.whitelisted_method.opportunity.make_opportunity_from_communication",
+	"frappe.www.list.get": "kersten.api.get_blog_list_html",
 }
 #
 # each overriding function accepts a `data` argument;
