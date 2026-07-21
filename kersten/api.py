@@ -300,3 +300,42 @@ def get_contact(custom_dealer,custom_dealer_contact):
 						and `tabContact`.name = %s;
 					 ''',(custom_dealer,custom_dealer_contact))
 	return result
+
+@frappe.whitelist(allow_guest=True)
+def get_blog_list_html(doctype="Blog Post", txt=None, limit_start=0, limit=20, category=None, **kwargs):
+	from frappe.utils import cint
+	try:
+		from blog.blog.doctype.blog_post.blog_post import get_blog_list
+	except ImportError:
+		return {"result": [], "show_more": False, "next_start": 0}
+
+	limit_start = cint(limit_start)
+	limit = cint(limit)
+
+	filters = {}
+	if category:
+		filters["blog_category"] = category
+
+	# Fetch one extra to determine if there's a next page
+	result = get_blog_list(
+		doctype=doctype, 
+		txt=txt, 
+		filters=filters, 
+		limit_start=limit_start, 
+		limit_page_length=limit + 1
+	)
+	
+	show_more = len(result) > limit
+	if show_more:
+		result = result[:-1]
+
+	html_result = []
+	for doc in result:
+		html_result.append(frappe.render_template("blog/blog/doctype/blog_post/templates/blog_post_row.html", {"doc": doc}))
+
+	return {
+		"result": html_result,
+		"show_more": show_more,
+		"next_start": limit_start + limit
+	}
+

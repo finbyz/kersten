@@ -411,9 +411,6 @@ def copy_project_tasks(original_project, new_project_name, new_assignee=None):
             
             # Store mapping of original task ID to new task ID
             task_mapping[task.name] = new_task.name
-        
-        # Commit batch to prevent memory buildup
-        frappe.db.commit()
     
     return {
         'message': _('Tasks copied successfully'),
@@ -633,14 +630,11 @@ def update_task(task_id, task_data, update_mode='single'):
             for related_task in related_tasks:
                 update_single_task(related_task.name, task_data, False)
         
-        frappe.db.commit()
-        
         return {
             "message": _("Task updated successfully")
         }
         
     except Exception as e:
-        frappe.db.rollback()
         frappe.log_error(frappe.get_traceback(), _("Task Update Error"))
         frappe.throw(_("Error updating task and related tasks: {0}").format(str(e)))
 def update_single_task(task_name, task_data, update_description):
@@ -813,15 +807,12 @@ def delete_task(task_data, delete_mode='single'):
         # Delete the main task
         delete_single_task(actual_task_name)
         
-        frappe.db.commit()
-        
         return {
             "message": _("Task deleted successfully") if delete_mode == 'single' 
                       else _("Task and all child tasks deleted successfully")
         }
         
     except Exception as e:
-        frappe.db.rollback()
         frappe.log_error(frappe.get_traceback(), _("Task Delete Error"))
         frappe.throw(_("Error deleting task: {0}").format(str(e)))
 
@@ -909,15 +900,12 @@ def copy_task_hierarchy(task_data, new_project=None, new_assignee=None):
             new_child = copy_single_task(child.name, new_project, new_assignee, new_parent)
             task_id_mapping[child.name] = new_child.name
         
-        frappe.db.commit()
-        
         return {
             "message": _("Task hierarchy copied successfully"),
             "new_task_id": new_task.name
         }
         
     except Exception as e:
-        frappe.db.rollback()
         frappe.log_error(frappe.get_traceback(), _("Task Copy Error"))
         frappe.throw(_("Error copying task: {0}").format(str(e)))
 

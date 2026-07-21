@@ -9,7 +9,6 @@ def create_opportunity(self):
         assigned_to_docs = frappe.get_all("ToDo", filters={"reference_type": "Opportunity", "reference_name": self.reference_name}, fields=["name"])
         for docs in assigned_to_docs:
             frappe.delete_doc("ToDo", docs["name"])
-            frappe.db.commit()
         doc = frappe.get_doc("Opportunity", self.reference_name)
         doc.opportunity_type = "Sweeping"
         doc.flags.ignore_mandatory = True

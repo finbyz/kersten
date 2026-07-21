@@ -163,6 +163,9 @@ doc_events = {
 	"Purchase Invoice": {
 		"on_cancel": "kersten.kersten.doc_events.purchase_invoice.on_cancel",
         "on_submit": "kersten.kersten.doc_events.purchase_invoice.on_submit",
+	},
+	"Sales Invoice": {
+		"before_validate": "kersten.kersten.doc_events.sales_invoice.before_validate",
 	}
 
 

@@ -216,11 +216,7 @@
 	{%- block style %}
 	{% if colocated_css -%}
 	<style>
-		{
-				{
-				colocated_css
-			}
-		}
+		{{ colocated_css }}
 	</style>
 	{%- endif %}
 	{%- endblock -%}

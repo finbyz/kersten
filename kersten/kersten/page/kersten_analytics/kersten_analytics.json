@@ -1,0 +1,24 @@
+{
+ "content": null,
+ "creation": "2026-06-23 00:10:32.112338",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-06-23 00:10:32.112338",
+ "modified_by": "Administrator",
+ "module": "Kersten",
+ "name": "kersten-analytics",
+ "owner": "Administrator",
+ "page_name": "kersten-analytics",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "Accounts Manager"},
+  {"role": "Sales Manager"},
+  {"role": "Stock Manager"}
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Kersten Analytics"
+}

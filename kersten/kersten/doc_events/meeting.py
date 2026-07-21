@@ -18,6 +18,3 @@ def create_tasks_from_meeting(doc, method):
 			"status": "To Do"
 		})
 		task.insert()
-
-	frappe.db.commit()
-		
