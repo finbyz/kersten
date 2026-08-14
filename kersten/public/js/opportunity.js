@@ -15,6 +15,7 @@ frappe.ui.form.on('Opportunity', {
 function set_dealer_contact_filter(frm){
     frm.set_query('custom_dealer_contact', function() {
         return {
+            query: "frappe.contacts.doctype.contact.contact.contact_query",
             filters: {
                 link_doctype: 'Customer',
                 link_name: frm.doc.custom_dealer
