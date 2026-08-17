@@ -1,19 +1,45 @@
 frappe.ui.form.on('Opportunity', {
-    refresh: function(frm) {
+    refresh: function (frm) {
         set_dealer_filter(frm);
         set_dealer_contact_filter(frm);
     },
-    custom_dealer: function(frm) {
+    custom_dealer: function (frm) {
         get_dealer_contact(frm);
     },
-    custom_dealer_contact:function(frm){
+    custom_dealer_contact: function (frm) {
         get_dealer_contact_details(frm);
+    },
+    company: function (frm) {
+        set_currency(frm);
+    },
+    party_name: function (frm) {
+        set_currency(frm);
+    },
+    onload: function (frm) {
+        set_currency(frm);
     }
-    
 });
 
-function set_dealer_contact_filter(frm){
-    frm.set_query('custom_dealer_contact', function() {
+function set_currency(frm) {
+    if (frm.doc.currency) {
+        return;
+    }
+    if (frm.doc.opportunity_from === "Customer" && frm.doc.party_name) {
+        frappe.db.get_value("Customer", frm.doc.party_name, "default_currency", function (r) {
+            let currency = (r && r.default_currency) ? r.default_currency : erpnext.get_currency(frm.doc.company);
+            if (currency && frm.doc.currency !== currency) {
+                frm.set_value("currency", currency);
+            }
+        });
+    } else {
+        let company_currency = erpnext.get_currency(frm.doc.company);
+        if (company_currency && (!frm.doc.currency || frm.doc.currency !== company_currency)) {
+            frm.set_value("currency", company_currency);
+        }
+    }
+}
+function set_dealer_contact_filter(frm) {
+    frm.set_query('custom_dealer_contact', function () {
         return {
             query: "frappe.contacts.doctype.contact.contact.contact_query",
             filters: {
@@ -24,28 +50,28 @@ function set_dealer_contact_filter(frm){
     });
 }
 function set_dealer_filter(frm) {
-    frm.set_query('custom_dealer', function() {
+    frm.set_query('custom_dealer', function () {
         return {
             filters: {
-                stocking_dealer: 1  
+                stocking_dealer: 1
             }
         };
     });
 }
 
-function get_dealer_contact(frm){
+function get_dealer_contact(frm) {
     if (frm.doc.custom_dealer) {
         frappe.call({
             method: "kersten.api.get_contact_data",
             args: {
                 custom_dealer: frm.doc.custom_dealer
             },
-            callback: function(r) {
+            callback: function (r) {
                 if (r.message && r.message.length > 0) {
                     const contact = r.message[0];
                     frm.set_value("custom_dealer_contact", contact[0]);
                 }
-                else{
+                else {
                     frm.set_value("custom_dealer_contact", "");
                 }
             }
@@ -53,21 +79,21 @@ function get_dealer_contact(frm){
     }
 }
 
-function get_dealer_contact_details(frm){
+function get_dealer_contact_details(frm) {
     if (frm.doc.custom_dealer_contact) {
         frappe.call({
             method: "kersten.api.get_contact",
             args: {
                 custom_dealer: frm.doc.custom_dealer,
-                custom_dealer_contact:frm.doc.custom_dealer_contact
+                custom_dealer_contact: frm.doc.custom_dealer_contact
             },
-            callback: function(r) {
+            callback: function (r) {
                 if (r.message && r.message.length > 0) {
                     const contact = r.message[0];
                     // console.log(contact)
                     frm.set_value("custom_dealer_contact_no", contact[0]);
                 }
-                else{
+                else {
                     frm.set_value("custom_dealer_contact", "");
                 }
             }
