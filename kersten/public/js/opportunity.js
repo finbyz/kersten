@@ -2,6 +2,7 @@ frappe.ui.form.on('Opportunity', {
     refresh: function (frm) {
         set_dealer_filter(frm);
         set_dealer_contact_filter(frm);
+        setup_notes_timeline_sync(frm);
     },
     custom_dealer: function (frm) {
         get_dealer_contact(frm);
@@ -99,4 +100,37 @@ function get_dealer_contact_details(frm) {
             }
         });
     }
+}
+
+function patch_crm_notes_timeline_sync() {
+    if (window.erpnext && erpnext.utils && erpnext.utils.CRMNotes && !erpnext.utils.CRMNotes._timeline_sync_patched) {
+        erpnext.utils.CRMNotes._timeline_sync_patched = true;
+        const orig_refresh = erpnext.utils.CRMNotes.prototype.refresh;
+        erpnext.utils.CRMNotes.prototype.refresh = function () {
+            orig_refresh.apply(this, arguments);
+            const frm = this.frm;
+            if (frm && frm.doctype === "Opportunity" && !frm.doc.__islocal) {
+                if (frm.sidebar && frm.sidebar.reload_docinfo) {
+                    frm.sidebar.reload_docinfo(function () {
+                        if (frm.timeline && frm.timeline.refresh) {
+                            frm.timeline.refresh();
+                        }
+                    });
+                } else if (frm.timeline && frm.timeline.refresh) {
+                    frm.timeline.refresh();
+                }
+            }
+        };
+    }
+}
+
+function setup_notes_timeline_sync(frm) {
+    patch_crm_notes_timeline_sync();
+
+    if (frm.doc.__islocal) {
+        return;
+    }
+
+    // Also refresh timeline whenever notes field is refreshed or updated
+    frm.timeline_notes_synced = true;
 }

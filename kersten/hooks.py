@@ -142,6 +142,9 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
+	"Opportunity": {
+		"on_update": "kersten.kersten.doc_events.opportunity.sync_notes_to_timeline",
+	},
 	"Communication": {
 		"on_update": "kersten.kersten.doc_events.communication.on_update",
 	},
