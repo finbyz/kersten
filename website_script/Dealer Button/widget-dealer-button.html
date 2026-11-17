@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<!--
+  Kersten Dealer Button Widget
+  Usage in ERPNext:
+  1. Create a Web Template Section on product page templates.
+  2. Use web_block in Jinja: {{ web_block({"template": "Dealer Button", "values": {}}) }}
+  3. Or paste widget-dealer-button-embed-snippet.html into a Custom HTML block.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dealer Button</title>
+<style>
+  #kersten-dealer-button-root {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  #kersten-dealer-button-root *, #kersten-dealer-button-root *::before, #kersten-dealer-button-root *::after {
+    box-sizing: border-box;
+  }
+</style>
+</head>
+<body>
+<div id="kersten-dealer-button-root"></div>
+<script>
+// Standalone Dealer Button — mount via #kersten-dealer-button-root
+// Optional: data-dealer-url on root to override link destination
+
+(function() {
+    const loadDealerButton = (container) => {
+        const dealerUrl = container.dataset.dealerUrl
+            || '/Kersten-Stocking-Dealers-Hire-Partners-and-Contractors';
+
+        container.className = 'kersten-dealer-locator';
+        container.style.cssText = 'margin: 20px 0; clear: both; display: block; box-sizing: border-box; width: 100%;';
+
+        container.innerHTML = `
+            <a href="${dealerUrl}"
+               style="display: block; background: #004d26; color: #fff; text-align: center; padding: 16px 20px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px; font-family: sans-serif; box-shadow: 0 4px 10px rgba(0, 77, 38, 0.2); transition: transform 0.2s ease, box-shadow 0.2s ease;"
+               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(0, 77, 38, 0.3)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0, 77, 38, 0.2)';">
+                📍 Find a Local Stocking Dealer or Hire Partner &rarr;
+            </a>
+        `;
+    };
+
+    const mountWidget = () => {
+        const root = document.getElementById('kersten-dealer-button-root');
+        if (root && !root.dataset.initialized) {
+            root.dataset.initialized = 'true';
+            loadDealerButton(root);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mountWidget);
+    } else {
+        mountWidget();
+    }
+})();
+
+</script>
+</body>
+</html>

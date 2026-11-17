@@ -14,8 +14,7 @@ app_license = "MIT"
 # app_include_css = "/assets/kersten/css/kersten.css"
 # app_include_js = "/assets/kersten/js/kersten.js"
 app_include_js = [
-	"kersten.bundle.js",
-    
+    "kersten.bundle.js",
 ]
 # include js, css files in header of web template
 web_include_css = "/assets/kersten/css/kersten.css"
@@ -33,15 +32,15 @@ web_include_js = "kerstenweb.bundle.js"
 
 # include js in doctype views
 doctype_js = {
-	"Quotation": "public/js/quotation.js",
-	# "Sales Order": "public/js/sales_order.js",
-	"Task": "public/js/task_management/doctype_js/task.js",
-	"Opportunity": "public/js/opportunity.js",
-	"Meeting": "public/js/meeting.js",
-	"Customer": "public/js/customer.js",
-	"Supplier": "public/js/supplier.js",
-	"Website Item": "public/js/website_item.js",
-	"Communication": "public/js/communication.js",
+    "Quotation": "public/js/quotation.js",
+    # "Sales Order": "public/js/sales_order.js",
+    "Task": "public/js/task_management/doctype_js/task.js",
+    "Opportunity": "public/js/opportunity.js",
+    "Meeting": "public/js/meeting.js",
+    "Customer": "public/js/customer.js",
+    "Supplier": "public/js/supplier.js",
+    "Website Item": "public/js/website_item.js",
+    "Communication": "public/js/communication.js",
 }
 doctype_list_js = {
     "Task": "public/js/task_management/list_js/task.js",
@@ -59,7 +58,7 @@ doctype_calendar_js = {
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# 	"Role": "home_page"
 # }
 
 # Generators
@@ -73,8 +72,8 @@ doctype_calendar_js = {
 
 # add methods and filters to jinja environment
 # jinja = {
-#	"methods": "kersten.utils.jinja_methods",
-#	"filters": "kersten.utils.jinja_filters"
+# 	"methods": "kersten.utils.jinja_methods",
+# 	"filters": "kersten.utils.jinja_filters"
 # }
 
 # Installation
@@ -116,11 +115,11 @@ doctype_calendar_js = {
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-#	"Event": "frappe.desk.doctype.event.event.has_permission",
+# 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # DocType Class
@@ -128,13 +127,13 @@ doctype_calendar_js = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
-    "Website Item": "kersten.kersten.override.website_item.WebsiteItem", 
-    "Blog Post":"kersten.kersten.override.blog_post.BlogPost",
-    "Assignment Rule": "kersten.kersten.override.doctype.assignment_rule.AssignmentRule", 
-	"Task":"kersten.task_management.override.doctype.task.Task",
-	"Notification":"kersten.task_management.override.doctype.notification.Notification",
-	"Auto Repeat":"kersten.task_management.override.doctype.auto_repeat.AutoRepeat"
+    "Web Template": "kersten.kersten.override.doctype.web_template.WebTemplate",
+    "Website Item": "kersten.kersten.override.website_item.WebsiteItem",
+    "Blog Post": "kersten.kersten.override.blog_post.BlogPost",
+    "Assignment Rule": "kersten.kersten.override.doctype.assignment_rule.AssignmentRule",
+    "Task": "kersten.task_management.override.doctype.task.Task",
+    "Notification": "kersten.task_management.override.doctype.notification.Notification",
+    "Auto Repeat": "kersten.task_management.override.doctype.auto_repeat.AutoRepeat",
 }
 
 # Document Events
@@ -154,17 +153,17 @@ doc_events = {
     "Meeting": {
         "on_submit": "kersten.kersten.doc_events.meeting.create_tasks_from_meeting",
         # "on_submit": "kersten.kersten.doc_events.meeting.create_event_on_meeting_submit",
-	},
-	"Delivery Note": {
-		"on_cancel": "kersten.kersten.doc_events.delivery_note.on_cancel",
-		"on_submit": "kersten.kersten.doc_events.delivery_note.on_submit",
-	},
+    },
+    "Delivery Note": {
+        "on_cancel": "kersten.kersten.doc_events.delivery_note.on_cancel",
+        "on_submit": "kersten.kersten.doc_events.delivery_note.on_submit",
+    },
     "Purchase Receipt": {
-		"on_cancel": "kersten.kersten.doc_events.purchase_receipt.on_cancel",
-		"on_submit": "kersten.kersten.doc_events.purchase_receipt.on_submit",
-	},
-	"Purchase Invoice": {
-		"on_cancel": "kersten.kersten.doc_events.purchase_invoice.on_cancel",
+        "on_cancel": "kersten.kersten.doc_events.purchase_receipt.on_cancel",
+        "on_submit": "kersten.kersten.doc_events.purchase_receipt.on_submit",
+    },
+    "Purchase Invoice": {
+        "on_cancel": "kersten.kersten.doc_events.purchase_invoice.on_cancel",
         "on_submit": "kersten.kersten.doc_events.purchase_invoice.on_submit",
 	},
 	"Sales Invoice": {
@@ -174,31 +173,58 @@ doc_events = {
 
     # "Meeting Schedule": {
     #     "after_insert": "kersten.kersten.doc_events.meeting_schedule.create_event_on_meeting_schedule",
-	# }
+    # }
 }
 
 # Scheduled Tasks
 # ---------------
 
 # scheduler_events = {
-#	"all": [
-#		"kersten.tasks.all"
-#	],
-#	"daily": [
-#		"kersten.tasks.daily"
-#	],
-#	"hourly": [
-#		"kersten.tasks.hourly"
-#	],
-#	"weekly": [
-#		"kersten.tasks.weekly"
-#	],
-#	"monthly": [
-#		"kersten.tasks.monthly"
-#	],
+# 	"all": [
+# 		"kersten.tasks.all"
+# 	],
+# 	"daily": [
+# 		"kersten.tasks.daily"
+# 	],
+# 	"hourly": [
+# 		"kersten.tasks.hourly"
+# 	],
+# 	"weekly": [
+# 		"kersten.tasks.weekly"
+# 	],
+# 	"monthly": [
+# 		"kersten.tasks.monthly"
+# 	],
 # }
 fixtures = [
-    {"dt": "Custom Field","filters": [["module", "=","kersten"]]},
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["module", "=", "kersten"],
+            "or",
+            ["dt", "=", "Item Website Specification"],
+            "or",
+            ["dt", "=", "Website Item"],
+            "or",
+            ["dt", "=", "Recommended Items"],
+            "or",
+            ["dt", "=", "Web Template"],
+        ],
+    },
+    {
+        "dt": "Property Setter",
+        "filters": [
+            ["module", "=", "kersten"],
+            "or",
+            ["doc_type", "=", "Item Website Specification"],
+            "or",
+            ["doc_type", "=", "Website Item"],
+            "or",
+            ["doc_type", "=", "Recommended Items"],
+            "or",
+            ["doc_type", "=", "Web Template"],
+        ],
+    },
 ]
 # Testing
 # -------
@@ -218,7 +244,7 @@ override_whitelisted_methods = {
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 override_doctype_dashboards = {
-	"Sales Order": "kersten.kersten.doc_events.sales_order_dashboard.get_data"
+    "Sales Order": "kersten.kersten.doc_events.sales_order_dashboard.get_data"
 }
 
 # exempt linked doctypes from being automatically cancelled
@@ -244,29 +270,29 @@ override_doctype_dashboards = {
 # --------------------
 
 # user_data_fields = [
-#	{
-#		"doctype": "{doctype_1}",
-#		"filter_by": "{filter_by}",
-#		"redact_fields": ["{field_1}", "{field_2}"],
-#		"partial": 1,
-#	},
-#	{
-#		"doctype": "{doctype_2}",
-#		"filter_by": "{filter_by}",
-#		"partial": 1,
-#	},
-#	{
-#		"doctype": "{doctype_3}",
-#		"strict": False,
-#	},
-#	{
-#		"doctype": "{doctype_4}"
-#	}
+# 	{
+# 		"doctype": "{doctype_1}",
+# 		"filter_by": "{filter_by}",
+# 		"redact_fields": ["{field_1}", "{field_2}"],
+# 		"partial": 1,
+# 	},
+# 	{
+# 		"doctype": "{doctype_2}",
+# 		"filter_by": "{filter_by}",
+# 		"partial": 1,
+# 	},
+# 	{
+# 		"doctype": "{doctype_3}",
+# 		"strict": False,
+# 	},
+# 	{
+# 		"doctype": "{doctype_4}"
+# 	}
 # ]
 
 # Authentication and authorization
 # --------------------------------
 
 # auth_hooks = [
-#	"kersten.auth.validate"
+# 	"kersten.auth.validate"
 # ]
