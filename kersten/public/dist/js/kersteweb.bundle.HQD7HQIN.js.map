@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../apps/kersten/kersten/public/js/product_ui/views.js"],
+  "sourcesContent": ["webshop.ProductView = class ProductView extends webshop.ProductView{\n\n\tconstructor(options) {\n\t\tObject.assign(this, options);\n\t\tthis.preference = this.view_type;\n\t\tthis.make();\n\t}\n    prepare_product_area_wrapper(view) {\n\t\tconsole.log(\"prepare_product_area_wrapper\");\n\t\tlet left_margin = view == \"list\" ? \"ml-2\" : \"\";\n\t\tlet top_margin = view == \"list\" ? \"mt-6\" : \"mt-minus-1\";\n\t\treturn this.products_section.append(`\n\t\t\t<br>\n\t\t\t<div id=\"products-${view}-area\" class=\"row products-list ${ top_margin } ${ left_margin }\"></div>\n\t\t`);\n\t}\n}"],
+  "mappings": ";;AAAA,UAAQ,cAAc,MAAM,oBAAoB,QAAQ,YAAW;AAAA,IAElE,YAAY,SAAS;AACpB,aAAO,OAAO,MAAM,OAAO;AAC3B,WAAK,aAAa,KAAK;AACvB,WAAK,KAAK;AAAA,IACX;AAAA,IACG,6BAA6B,MAAM;AACrC,cAAQ,IAAI,8BAA8B;AAC1C,UAAI,cAAc,QAAQ,SAAS,SAAS;AAC5C,UAAI,aAAa,QAAQ,SAAS,SAAS;AAC3C,aAAO,KAAK,iBAAiB,OAAO;AAAA;AAAA,uBAEf,uCAAwC,cAAgB;AAAA,GAC5E;AAAA,IACF;AAAA,EACD;",
+  "names": []
+}
