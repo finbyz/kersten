@@ -1,0 +1,1729 @@
+// Product page - after attachments/accessories
+// Home page
+// Compatibility Centre page
+
+/* --- [0] GLOBAL UTILITIES & COMPACT STYLING (Safe-Wrapped) --- */
+(function() {
+    // 3. WIDGET RESIZER
+    if (window.location.pathname.includes('fitment-tool-embed')) {
+        const sendHeight = () => {
+            const height = document.body.scrollHeight;
+            window.parent.postMessage({ 'kerstenWidgetHeight': height }, "*");
+        };
+        window.addEventListener('load', sendHeight);
+        window.addEventListener('resize', sendHeight);
+        document.addEventListener('click', () => setTimeout(sendHeight, 200));
+    }
+})();
+
+
+/* --- WIDGET AUTO-RESIZER ENGINE (SENDER) --- */
+const sendHeightToParent = () => {
+    if (window.location.pathname.includes('fitment-tool-embed')) {
+        const height = document.body.scrollHeight;
+        window.parent.postMessage({ 'kerstenWidgetHeight': height }, "*");
+    }
+};
+window.addEventListener('load', sendHeightToParent);
+window.addEventListener('resize', sendHeightToParent);
+document.addEventListener('click', () => setTimeout(sendHeightToParent, 200));
+
+/* --- CHATBOT KILL SWITCH FOR EMBED PAGE --- */
+if (window.location.pathname.includes('fitment-tool-embed')) {
+    const chatFailsafe = setInterval(() => {
+        const chatWidget = document.querySelector('iframe[src*="enterprise-operation"], #hs-messages-messenger, .privy-embed-widget');
+        if (chatWidget) { chatWidget.style.setProperty("display", "none", "important"); chatWidget.remove(); clearInterval(chatFailsafe); }
+    }, 200);
+    setTimeout(() => clearInterval(chatFailsafe), 10000);
+}
+
+
+/* FRAPPE READY */
+
+
+/* --- KERSTEN UNIVERSAL FITMENT WIZARD (v161.0 - KERSTEN EDITION) --- */
+
+(function() {
+
+    // 0. SMART GATEKEEPER
+
+    const currentUrl = window.location.href.toLowerCase();
+
+    const currentTitle = document.title.toLowerCase();
+
+    const currentPath = window.location.pathname;
+
+
+
+    const isHomepage = currentPath === '/' || currentPath === '/index.html' || currentPath === '/home';
+
+    const validContexts = [
+
+        "sweeper", "plough", "spreader", "attachment", "weedbrush", "weed", "moss",
+
+        "harrow", "mower", "collector", "renovator", "linkage",
+
+        "km", "fkm", "sch", "snow", "winter", "ub", "wkb", "easy", "zasso", "zap", "kersten"
+
+    ];
+
+
+
+    const isAttachmentPage = validContexts.some(k => currentUrl.includes(k) || currentTitle.includes(k));
+
+    if (!isAttachmentPage && !isHomepage) return;
+
+
+
+    // --- BRAND COLORS ---
+
+    const K_RED = "#D32F2F";
+
+    const K_ORANGE = "#FF6D00";
+
+    const K_DARK = "#212121";
+
+    const K_BLUE = "#0277bd";
+
+    const K_BROWN = "#a0522d";
+
+
+
+    // --- 1. SMART LINK ENGINE ---
+
+    const getProductLink = (machineName) => {
+
+        const name = machineName.toLowerCase();
+
+        if (name.includes('km') || name.includes('fkm') || name.includes('sweeper')) return "/sweepers";
+
+        if (name.includes('plough') || name.includes('sch') || name.includes('faulkner') || name.includes('snk')) return "/Snow-plough-series";
+
+        if (name.includes('spreader') || name.includes('polaro') || name.includes('matev') || name.includes('sldst')) return "/Pedestrian-and-tractor-mounted-spreader";
+
+        if (name.includes('ub') || name.includes('wkb') || name.includes('weed')) return "/weedbrush-for-tractors";
+
+        return "/all-products";
+
+    };
+
+
+
+    // --- 2. SECTOR INTELLIGENCE ENGINE ---
+
+    const getSectorBadge = (selection) => {
+
+        const lowerSelection = selection.toLowerCase();
+
+        const heavyBrands = ["jcb", "manitou", "merlo", "caterpillar", "bobcat", "kubota m", "claas", "k2100", "alpin"];
+
+        const agBrands = ["fendt", "john deere", "massey", "new holland", "case ih", "valtra"];
+
+
+
+        // Construction/Heavy Badge
+
+        if (heavyBrands.some(brand => lowerSelection.includes(brand))) {
+
+            return `
+
+                <div id="sector-validation-badge" style="background:#fef2f2; border:2px solid #dc2626; border-radius:8px; padding:15px; margin-bottom:20px; display:flex; align-items:center; gap:15px; animation: fadeIn 0.5s ease-out;">
+
+                    <div style="font-size:30px;">🏗️</div>
+
+                    <div>
+
+                        <strong style="color:#991b1b; display:block; font-size:15px;">Heavy-Duty Fitment Verified</strong>
+
+                        <span style="font-size:13px; color:#991b1b;">Reinforced chassis/flange confirmed for heavy site detritus on <strong>${selection}</strong>.</span>
+
+                    </div>
+
+                </div>`;
+
+        }
+
+        // Agricultural Badge
+
+        if (agBrands.some(brand => lowerSelection.includes(brand))) {
+
+            return `
+
+                <div id="sector-validation-badge" style="background:#f0fdf4; border:2px solid #16a34a; border-radius:8px; padding:15px; margin-bottom:20px; display:flex; align-items:center; gap:15px; animation: fadeIn 0.5s ease-out;">
+
+                    <div style="font-size:30px;">🚜</div>
+
+                    <div>
+
+                        <strong style="color:#166534; display:block; font-size:15px;">Agricultural Flow Optimization</strong>
+
+                        <span style="font-size:13px; color:#166534;">System matched for high-flow hydraulics of <strong>${selection}</strong> tractors.</span>
+
+                    </div>
+
+                </div>`;
+
+        }
+
+        return '';
+
+    };
+
+
+
+    // --- 3. COMPLETE VEHICLE DATABASE ---
+
+    const commonVehicles = {
+
+        "Kersten (Two Wheel)": {
+
+            "K820 / K820 Pro / Pro E": {
+
+                landingPage: "/pedestrian-two-wheel-tractor-series/kersten-k-series",
+
+                sweeping: { front: { bracket: "Kersten Quick-Attach 35", machine: "EFKM 090 H", collector: "SSB 090 K", gully: "ASH 403237", infrastructure: [{ name: "Hydraulic Power Unit", link: "/pedestrian-two-wheel-tractor-series/kersten-k-series" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten Quick-Attach 35", machine: "SCHN 100 K", infrastructure: [{ name: "Standard Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-k-series" }] }, rear: { bracket: "Rear Hitch", machine: "SLDST 70 HK" } },
+
+                weedbrush: { front: { bracket: "ABF-WKM 820", machine: "WKBH II ABF", disc: "WKBH II Head", control: "Handlebar", wheel: "Support Wheel", note: "⚠️ Requires bracket ABF-WKM 820." } }
+
+            },
+
+            "K1500 / K1500 E": {
+
+                landingPage: "/pedestrian-two-wheel-tractor-series/kersten-k-series",
+
+                sweeping: { front: { bracket: "Kersten Quick-Attach 35", machine: "EFKM 090 H", collector: "SSB 090 K", gully: "ASH 403237", infrastructure: [{ name: "Hydraulic Power Unit", link: "/pedestrian-two-wheel-tractor-series/kersten-k-series" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten Quick-Attach 35", machine: "SCHN 100 K", infrastructure: [{ name: "Standard Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-k-series" }] }, rear: { bracket: "Rear Hitch", machine: "SLDST 70 HK" } },
+
+                weedbrush: { front: { bracket: "ABF-WKM 1500", machine: "WKBH II ABF", disc: "WKBH II Head", control: "Handlebar", wheel: "Support Wheel", note: "⚠️ Requires bracket ABF-WKM 1500." } }
+
+            },
+
+            "K2100": {
+
+                landingPage: "/pedestrian-two-wheel-tractor-series/kersten-k-series",
+
+                sweeping: { front: { bracket: "Kersten Quick-Attach 35", machine: "EFKM 100 K", collector: "SSB 100 K", gully: "ASH 403237", infrastructure: [{ name: "Heavy Duty Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-k-series" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten Quick-Attach 35", machine: "SCHN 100 K", infrastructure: [{ name: "Standard Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-k-series" }] }, rear: { bracket: "Rear Hitch", machine: "SLDST 70 HK" } },
+
+                weedbrush: { front: { bracket: "ABF-WKM 1500", machine: "WKBH II ABF", disc: "WKBH II Head", control: "Handlebar", wheel: "Support Wheel", note: "⚠️ Requires bracket ABF-WKM 1500 (Check Fitment)." } }
+
+            },
+
+            "UBS Hydro 9 / 13 / 16": {
+
+                landingPage: "/pedestrian-two-wheel-tractor-series/kersten-ubs-series",
+
+                sweeping: { front: { bracket: "Quick-Attach 70", machine: "EFKM 10037 M-U 70", collector: "SSB 100 K-KR", gully: "ASH 403237", infrastructure: [{ name: "UBS PTO Drive", link: "/pedestrian-two-wheel-tractor-series/kersten-ubs-series" }] }, rear: null },
+
+                winter: { front: { bracket: "Quick-Attach 70", machine: "SCHN 125 FK-M-KU 70", infrastructure: [{ name: "UBS Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-ubs-series" }] }, rear: { bracket: "Rear Hitch", machine: "SLDST 70 M-U 70" } },
+
+                weedbrush: { front: { bracket: "Quick-Attach 70", machine: "WKB 60 M-U 70", disc: "60cm Fixed", control: "Handlebar", wheel: "Support Wheel", note: "Direct Mechanical PTO Drive." } }
+
+            },
+
+            "Alpin / Alpin Pro": {
+
+                landingPage: "/pedestrian-two-wheel-tractor-series/kersten-ubs-series",
+
+                sweeping: { front: { bracket: "Quick-Attach 70", machine: "EFKM 10037 M-U 70", collector: "SSB 100 K-KR", gully: "ASH 403237", infrastructure: [{ name: "Slope Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-ubs-series" }] }, rear: null },
+
+                winter: { front: { bracket: "Quick-Attach 70", machine: "SCHN 125 FK-M-KU 70", infrastructure: [{ name: "Slope Hydraulics", link: "/pedestrian-two-wheel-tractor-series/kersten-ubs-series" }] }, rear: { bracket: "Rear Hitch", machine: "SLDST 70 M-U 70" } },
+
+                weedbrush: { front: { bracket: "Quick-Attach 70", machine: "WKB 60 M-U 70", disc: "60cm Fixed", control: "Handlebar", wheel: "Support Wheel", note: "Designed for steep gradient work." } }
+
+            }
+
+        },
+
+        "Kubota": {
+
+            "BX Series (BX231 / BX261)": {
+
+                landingPage: "/Attachments-for-Kubota-BX-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Kersten Front Linkage (Cat 0)", link: "/front-linkages" }, { name: "Front PTO Kit", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 120 Plough", infrastructure: [{ name: "Kersten Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: {
+
+                    front: { bracket: "ABR-UB-KD-CAT0", machine: "UB 6080 H", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Spindle Gauge Wheel", note: "⚠️ Hybrid Drive: Uses Rear PTO to power hydraulic head." },
+
+                    rear_kit: "Requires PTO Hydraulic Power Pack for UB 6080"
+
+                }
+
+            },
+
+            "B1 Series (B1121 / B1161)": {
+
+                landingPage: "/Attachments-for-Kubota-B-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Kersten Front Linkage", link: "/front-linkages" }, { name: "Front PTO Kit", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 120 Plough", infrastructure: [{ name: "Kersten Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "B2 Series (B2231 / B2261)": {
+
+                landingPage: "/Attachments-for-Kubota-B-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045 (1.5m)", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Kersten Front Linkage", link: "/front-linkages" }, { name: "Front PTO Kit", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140 Plough", infrastructure: [{ name: "Kersten Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 060 (60cm) or BT 080", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY", note: "Standard for IWM Path Edging." } }
+
+            },
+
+            "ST Series (ST341 / ST371)": {
+
+                landingPage: "/Attachments-for-Kubota-ST-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 ST", machine: "KM 13045 (Front PTO)", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Matev Cat 0 Linkage", link: "/front-linkages" }, { name: "Front PTO 2000rpm", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-ST", machine: "Kersten SCH 140 Plough", infrastructure: [{ name: "Matev Cat 0 Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-250 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "L Series (L1361 / L1421)": {
+
+                landingPage: "/Attachments-for-Kubota-L-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 52 KD", machine: "KM 15052", collector: "SSB 15052", gully: "ASH 4052", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150 Plough", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev SPR-250 (Self-Loading)", infrastructure: [{ name: "Hydraulic Top Link", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "L2 Series (L2421 / L2501)": {
+
+                landingPage: "/Attachments-for-Kubota-L-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 52 KD", machine: "KM 15052", collector: "SSB 15052", gully: "ASH 4052", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150 Plough", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev SPR-250 (Self-Loading)", infrastructure: [{ name: "Hydraulic Top Link", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "LX Series (LX351 / LX401)": {
+
+                landingPage: "/Attachments-for-Kubota-L-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Kersten Cat 1 Linkage", link: "/front-linkages" }, { name: "Front PTO", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140 Plough", infrastructure: [{ name: "Kersten Cat 1 Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-250 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "M Series (M4062 / M5091)": {
+
+                landingPage: "/fkm60-series",
+
+                sweeping: { front: { bracket: "Kersten ABR 60 KD", machine: "FKM 22560", collector: "SSB 22560", gully: "ASH 4060", infrastructure: [{ name: "Cat 2 Front Linkage", link: "/front-linkages" }, { name: "1000rpm Front PTO", link: "/front-linkages" }] }, rear: { bracket: "Cat 2", machine: "HKM 22560 HY", collector: "SSB 22560", gully: "ASH 4060" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SNK 270 Plough", infrastructure: [{ name: "Cat 2 Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 2", machine: "Matev PDS 300+" } },
+
+                weedbrush: { front: { bracket: "ABR-UB-UNI", machine: "UB Easy (FL/VB)", disc: "BT 080 or VB Head", control: "Cab Remote", wheel: "MP-LR-UB-EASY", note: "Verified for Highway/Verge 'Tracy's Law' Compliance." } }
+
+            },
+
+            "GR Series (GR1600 / GR2120)": {
+
+                landingPage: "/Attachments-for-Kubota-GR1600-GR2100",
+
+                sweeping: { front: { bracket: "FKDR A-Frame", machine: "KM 11537 H-FKDR", collector: "SSB 11537", gully: "ASH 3737", infrastructure: [{ name: "FKDR Hydraulic Front Linkage Kit", link: "/front-linkages" }], note: "⚠️ HYDRAULIC CONVERSION." }, rear: null },
+
+                winter: { front: { bracket: "FKDR A-Frame", machine: "Kersten SCH 120 (FKDR)", infrastructure: [{ name: "FKDR Hydraulic Front Linkage Kit", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: { front: { bracket: "FKDR-HYDR-KUGR1600", machine: "WKB 40 (Ride-On)", disc: "40cm Fixed", control: "FKDR Control Valve", wheel: "Standard Gauge Wheel", note: "Includes FKDR Belt-Driven Hydraulic Pump." } }
+
+            },
+
+            "G Series (G23 / G26)": {
+
+                landingPage: "/Attachments-for-Kubota-G23-G26-Series",
+
+                sweeping: { front: { bracket: "ABR 45 G-Series", machine: "KM 13045 H", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Kersten Cat 0 Front Linkage", link: "/front-linkages" }, { name: "Kersten Auxiliary Hydraulic Kit", link: "/front-linkages" }], note: "⚠️ HYDRAULIC KIT REQUIRED." }, rear: null },
+
+                winter: { front: { bracket: "ABR-SCHN-G", machine: "Kersten SCH 120", infrastructure: [{ name: "Kersten Cat 0 Front Linkage", link: "/front-linkages" }, { name: "Auxiliary Hydraulic Kit", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: null
+
+            },
+
+            "F Series (Outfront Mower)": {
+
+                landingPage: "/Attachments-for-Kubota-F-Series",
+
+                sweeping: { front: { bracket: "ABR 45 F-Series", machine: "KM 15045 M (Mechanical)", collector: "SSB 15045", gully: "ASM 4045", infrastructure: [{ name: "Hydraulic Kit", link: "/front-linkages" }] }, rear: null },
+
+                winter: { front: { bracket: "ABR-SCHN-F", machine: "Kersten SCH 120", infrastructure: [{ name: "Hydraulic Kit", link: "/front-linkages" }] }, rear: { bracket: "Rear Mount", machine: "Lehner Polaro 110 (12V)" } },
+
+                weedbrush: { front: { bracket: "ABR UB FM-KUB-F", machine: "UB 6080 MH", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Integrated Gauge Wheel", note: "Mechanical-Hydraulic Hybrid: Uses Mower PTO for Brush Power." } }
+
+            },
+
+            "RTV (900 / X1110)": {
+
+                landingPage: "/Attachments-for-Kubota-RTV",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 RTV", machine: "KM 15045 H", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Kersten Hydraulic Kit", link: "/front-linkages" }], note: "⚠️ MANDATORY: Requires Kersten Hydraulic Kit." }, rear: null },
+
+                winter: { front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros UTV 1.8m" }, rear: { bracket: "Bed Mount", machine: "Lehner Polaro 170" } },
+
+                weedbrush: null
+
+            }
+
+        },
+
+        "John Deere": {
+
+            "X300 / X500 Series": {
+
+                landingPage: "/Attachments-for-John-Deere-X300-X500",
+
+                sweeping: { front: { bracket: "FKDR A-Frame", machine: "KM 11537 H-FKDR", collector: "SSB 11537", gully: "ASH 3737", infrastructure: [{ name: "FKDR Hydraulic Front Linkage", link: "/front-linkages" }], note: "⚠️ HYDRAULIC CONVERSION: Requires FKDR Kit." }, rear: null },
+
+                winter: { front: { bracket: "FKDR A-Frame", machine: "Kersten SCH 120 (FKDR)", infrastructure: [{ name: "FKDR Hydraulic Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Tow Behind", machine: "Matev Tow-Spreader", note: "Wheel driven." } },
+
+                weedbrush: { front: { bracket: "FKDR-HYDR-JDX300", machine: "WKB 40 (Ride-On)", disc: "40cm Fixed", control: "FKDR Lever Control", wheel: "Standard Gauge Wheel", note: "Belt-Driven Hydraulic Conversion Kit Included." } }
+
+            },
+
+            "X700 Series": {
+
+                landingPage: "/Attachments-for-John-Deere-X700-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 37 JD-X", machine: "KM 12537 M", collector: "SSB 12537", gully: "ASH 403237", infrastructure: [{ name: "Front Linkage & PTO", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140 Plough", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "X900 Series": {
+
+                landingPage: "/Attachments-for-John-Deere-X900-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 37 JD-X", machine: "KM 12537 M", collector: "SSB 12537", gully: "ASH 403237", infrastructure: [{ name: "Front Linkage & PTO", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140 Plough", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO Shaft", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "1 Series (1026R / 1025R)": {
+
+                landingPage: "/Attachments-for-John-Deere-1-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 US", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "JD Front Quick-Hitch", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-US", machine: "Kersten SCH 140", infrastructure: [{ name: "JD Front Quick-Hitch", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: {
+
+                    front: { bracket: "ABR-UB-KD-CAT0", machine: "UB 6080 H", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Spindle Gauge Wheel", note: "⚠️ Hybrid Drive: Uses Rear PTO to power hydraulic head." },
+
+                    rear_kit: "Requires PTO Hydraulic Power Pack for UB 6080"
+
+                }
+
+            },
+
+            "2 Series (2026R / 2036R)": {
+
+                landingPage: "/Attachments-for-John-Deere-2-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045 / 15045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140 / 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-250 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: {
+
+                    front: { bracket: "ABR-UB-KD-CAT0", machine: "UB 6080 H", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Spindle Gauge Wheel", note: "⚠️ Hybrid Drive: Uses Rear PTO to power hydraulic head." },
+
+                    rear_kit: "Requires PTO Hydraulic Power Pack for UB 6080"
+
+                }
+
+            },
+
+            "3 Series (3036E / 3038R)": {
+
+                landingPage: "/Attachments-for-John-Deere-3-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev S-250 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "4 Series (4052R / 4066R)": {
+
+                landingPage: "/Attachments-for-John-Deere-3-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 52 KD", machine: "KM 15052", collector: "SSB 15052", gully: "ASH 4052", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150 / 170", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1 Linkage", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-UNI", machine: "UB Easy (FL/VB)", disc: "BT 080 (80cm)", control: "Cab Remote", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "5R / 6R Series": {
+
+                landingPage: "/fkm60-series",
+
+                sweeping: { front: { bracket: "Kersten ABR 60 KD", machine: "FKM 22560", collector: "SSB 22560", gully: "ASH 4060", infrastructure: [{ name: "Cat 2 Front Hitch & PTO", link: "/front-linkages" }] }, rear: { bracket: "Cat 2", machine: "HKM 22560 HY", collector: "SSB 22560", gully: "ASH 4060", note: "⚠️ FLOW CHECK: 50 l/min Required." } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SNK 270 Plough", infrastructure: [{ name: "Cat 2 Front Hitch", link: "/front-linkages" }] }, rear: { bracket: "Cat 2 Linkage", machine: "Matev PDS 300+ (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-UNI (Cat 2)", machine: "UB Easy VB (Vertibrush)", disc: "Vertical Edge Head", control: "Cab Remote", wheel: "MP-LR-UB-EASY", note: "Standard for Highway Edging." } }
+
+            },
+
+            "F Series (Outfront)": {
+
+                landingPage: "/Attachments-for-John-Deere-Out-Front-Mowers",
+
+                sweeping: { front: { bracket: "ABR 45 JD-F", machine: "KM 15045 M", collector: "SSB 15045", gully: "ASM 4045", infrastructure: [{ name: "Hydraulic Kit", link: "/front-linkages" }] }, rear: null },
+
+                winter: { front: { bracket: "ABR-SCHN-JD-F", machine: "Kersten SCH 120", infrastructure: [{ name: "Hydraulic Kit", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-UB-FM-JD-1500", machine: "UB 6080 MH", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Integrated Gauge Wheel", note: "Utilizes JD High-Speed PTO." } }
+
+            },
+
+           "Gator HPX / XUV": {
+
+                landingPage: "/Attachments-for-John-Deere-Gator",
+
+                sweeping: null,
+
+                winter: { front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros UTV 1.8m" }, rear: { bracket: "Bed Mount", machine: "Lehner Polaro 170 / XL" } },
+
+                weedbrush: null
+
+            }
+
+        },
+
+        "Iseki": {
+
+            "SXG 216": {
+
+                landingPage: "/Attachments-for-Iseki-SXG-216",
+
+                sweeping: { front: { bracket: "FKDR A-Frame", machine: "KM 11537 H-FKDR", collector: "SSB 11537", gully: "ASH 3737", infrastructure: [{ name: "FKDR Hydraulic Front Linkage", link: "/front-linkages" }], note: "⚠️ HYDRAULIC CONVERSION." }, rear: null },
+
+                winter: { front: { bracket: "FKDR A-Frame", machine: "Kersten SCH 120 (FKDR)", infrastructure: [{ name: "FKDR Hydraulic Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Tow Behind", machine: "Matev Tow-Spreader", note: "Wheel driven." } },
+
+                weedbrush: { front: { bracket: "FKDR-HYDR-ISSXG216", machine: "WKB 40 (Ride-On)", disc: "40cm Fixed", control: "Lever Control", wheel: "Standard Gauge Wheel" } }
+
+            },
+
+            "SXG 323 / 326": {
+
+                landingPage: "/Attachments-for-Iseki-SXG-323-326-Series",
+
+                sweeping: { front: { bracket: "FKDR A-Frame", machine: "KM 12537 H-FKDR", collector: "SSB 12537", gully: "ASH 3737", infrastructure: [{ name: "FKDR Hydraulic Front Linkage", link: "/front-linkages" }], note: "⚠️ HYDRAULIC CONVERSION." }, rear: null },
+
+                winter: { front: { bracket: "FKDR A-Frame", machine: "Kersten SCH 120 (FKDR)", infrastructure: [{ name: "FKDR Hydraulic Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Tow Behind", machine: "Matev Tow-Spreader", note: "Wheel driven." } },
+
+                weedbrush: null
+
+            },
+
+            "TXGS 24 / 2400": {
+
+                landingPage: "/Attachments-for-Iseki-TXG-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 120", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: {
+
+                    front: { bracket: "ABR-UB-KD-CAT0", machine: "UB 6080 H", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Spindle Gauge Wheel", note: "⚠️ Hybrid Drive: Uses Rear PTO to power hydraulic head." },
+
+                    rear_kit: "Requires PTO Hydraulic Power Pack for UB 6080"
+
+                }
+
+            },
+
+            "TM Series (TM3185 / 3267)": {
+
+                landingPage: "/Attachments-for-Iseki-TM-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: {
+
+                    front: { bracket: "ABR-UB-KD-CAT0", machine: "UB 6080 H", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Spindle Gauge Wheel", note: "⚠️ Hybrid Drive: Uses Rear PTO to power hydraulic head." },
+
+                    rear_kit: "Requires PTO Hydraulic Power Pack for UB 6080"
+
+                }
+
+            },
+
+            "TG Series (TG 6370 / 6490)": {
+
+                landingPage: "/Attachments-for-Iseki-TG-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 52 KD", machine: "KM 15052", collector: "SSB 15052", gully: "ASH 4052", infrastructure: [{ name: "Cat 1/2 Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "TH Series": {
+
+                landingPage: "/Attachments-for-Iseki-TH-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "SF Series (Outfront)": {
+
+                landingPage: "/Attachments-for-Iseki-SF-Series",
+
+                sweeping: { front: { bracket: "ABR 45 FM", machine: "KM 15045 M", collector: "SSB 15045", gully: "ASH 4045" }, rear: null },
+
+                winter: { front: { bracket: "ABR-SCHN-FM", machine: "Kersten SCH 120" }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-F-ISE-SF", machine: "UB 6080 MH", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Integrated Gauge Wheel" } }
+
+            },
+
+            "TLE Series": {
+
+                landingPage: "/Attachments-for-Iseki-TLE-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            }
+
+        },
+
+        "Kioti": {
+
+            "CS Series (CS 2220 / 2610)": {
+
+                landingPage: "/Attachments-for-Kioti-CS-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "CX Series (CX 2510)": {
+
+                landingPage: "/Attachments-for-Kioti-CS-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "CK Series (CK 2630 / 3530)": {
+
+                landingPage: "/Attachments-for-Kioti-CK-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-250 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "DK Series (DK 4510 / 5010)": {
+
+                landingPage: "/Attachments-for-Kioti-CK-Series",
+
+                sweeping: { front: { bracket: "Kersten ABR 52 KD", machine: "KM 15052", collector: "SSB 15052", gully: "ASH 4052", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-UNI", machine: "UB Easy (FL/VB)", disc: "BT 080 (80cm)", control: "Cab Remote", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "WD 1260": {
+
+                landingPage: "/Attachments-for-Kioti-WD-1260",
+
+                sweeping: { front: { bracket: "ABR 45 FM", machine: "KM 13045 H" }, rear: null },
+
+                winter: { front: { bracket: "ABR-SCHN-FM", machine: "Kersten SCH 120" }, rear: null },
+
+                weedbrush: null
+
+            }
+
+        },
+
+        "New Holland": {
+
+            "Boomer 25": {
+
+                landingPage: "/Attachments-for-New-Holland-Boomer-25",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 120", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "Boomer 30 / 35": {
+
+                landingPage: "/Attachments-for-New-Holland-Boomer-30-35",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-250 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            },
+
+            "Boomer 40 / 50": {
+
+                landingPage: "/Attachments-for-New-Holland-Boomer-40",
+
+                sweeping: { front: { bracket: "Kersten ABR 52 KD", machine: "KM 15052", collector: "SSB 15052", gully: "ASH 4052", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-KD", machine: "UB 6080 MH", disc: "BT 080 (80cm)", control: "ST-UB Joystick", wheel: "MP-LR-UB-EASY" } }
+
+            }
+
+        },
+
+        "Solis": {
+
+            "Solis 20 / 26": {
+
+                landingPage: "/Compact-Tractor-Attachments-Page",
+
+                sweeping: { front: { bracket: "Kersten ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Solis Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 120", infrastructure: [{ name: "Solis Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            }
+
+        },
+
+        "TYM / Branson": {
+
+            "T25 / 2500": {
+
+                landingPage: "/Compact-Tractor-Attachments-Page",
+
+                sweeping: { front: { bracket: "ABR 45 KD", machine: "KM 13045", collector: "SSB 13045", gully: "ASH 4045", infrastructure: [{ name: "Zuidberg/Matev Front Linkage", link: "/front-linkages" }, { name: "Front PTO", link: "/front-linkages" }] }, rear: { bracket: "Standard CAT 1", machine: "HKM 12540", collector: "SSB 12540", gully: "ASH 4040" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 140", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev S-100 (PTO)", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: null
+
+            },
+
+            "F50 / 5025": {
+
+                landingPage: "/Compact-Tractor-Attachments-Page",
+
+                sweeping: { front: { bracket: "ABR 45 KD", machine: "KM 15045", collector: "SSB 15045", gully: "ASH 4045", infrastructure: [{ name: "Front Linkage Cat 1", link: "/front-linkages" }] }, rear: { bracket: "Standard CAT 1", machine: "HKM 15052 HY", collector: "SSB 15052", gully: "ASH 4052" } },
+
+                winter: { front: { bracket: "ABR-SCHN-KD", machine: "Kersten SCH 150", infrastructure: [{ name: "Front Linkage", link: "/front-linkages" }] }, rear: { bracket: "Cat 1", machine: "Matev SPR-250", infrastructure: [{ name: "Rear PTO", link: "/front-linkages" }] } },
+
+                weedbrush: { front: { bracket: "ABR-UB-UNI", machine: "UB Easy (FL/VB)", disc: "BT 080 (80cm)", control: "Cab Remote", wheel: "MP-LR-UB-EASY" } }
+
+            }
+
+        },
+
+        "Grillo": {
+
+            "FD / FM Series": {
+
+                landingPage: "/Attachments-for-Grillo-FD-%26-FM-Series",
+
+                sweeping: { front: { bracket: "ABR 45 GRILLO", machine: "KM 13045 HY (Hydraulic)", collector: "SSB 13045", gully: "ASH 4045", note: "⚠️ DIRECT HYDRAULIC: Connects directly to Grillo front hydraulic couplings." }, rear: null },
+
+                winter: { front: { bracket: "ABR 45 GRILLO", machine: "Kersten SCH 140 HY", note: "Direct hydraulic connection." }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-UB-FM-JD-1500", machine: "UB 6080 MH", disc: "BT 060 (60cm)", control: "ST-UB Joystick", wheel: "Integrated Gauge Wheel", note: "Utilizes JD High-Speed PTO." } }
+
+            }
+
+        },
+
+        "JCB": {
+
+            "Loadall (Q-Fit)": {
+
+                landingPage: "/Telehandler-Attachments-Page",
+
+                sweeping: { front: { bracket: "Kersten ABR 60 JCB-QFIT", machine: "FKM 22560 HY", collector: "SSB 22560", gully: "ASH 4060", infrastructure: [{ name: "Hydraulic Quick-Release", link: "/front-linkages" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten ABR 60 JCB-QFIT", machine: "Kersten SNK 270 HY", infrastructure: [{ name: "Hydraulic Service", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-UB-QFIT", machine: "UB Easy VB (Vertibrush)", disc: "80cm Vertical Head", control: "Wireless Remote Option", wheel: "MP-LR-UB-EASY", note: "Specifically for Highway Edging & Verge Hygiene." } }
+
+            },
+
+            "Compact (Tool Carrier)": {
+
+                landingPage: "/Telehandler-Attachments-Page",
+
+                sweeping: { front: { bracket: "Kersten ABR 60 JCB-TC", machine: "FKM 22560 HY", collector: "SSB 22560", gully: "ASH 4060", infrastructure: [{ name: "Hydraulic Quick-Release", link: "/front-linkages" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten ABR 60 JCB-TC", machine: "Kersten SNK 220 HY", infrastructure: [{ name: "Hydraulic Service", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-UB-TC", machine: "UB Easy VB (Vertibrush)", disc: "80cm Vertical Head", control: "Wireless Remote Option", wheel: "MP-LR-UB-EASY" } }
+
+            }
+
+        },
+
+        "Manitou": {
+
+            "MLT Series": {
+
+                landingPage: "/Telehandler-Attachments-Page",
+
+                sweeping: { front: { bracket: "Kersten ABR 60 MANITOU", machine: "FKM 22560 HY", collector: "SSB 22560", gully: "ASH 4060", infrastructure: [{ name: "Hydraulic Quick-Release", link: "/front-linkages" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten ABR 60 MANITOU", machine: "Kersten SNK 270 HY", infrastructure: [{ name: "Hydraulic Service", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-UB-MANITOU", machine: "UB Easy VB (Vertibrush)", disc: "80cm Vertical Head", control: "Wireless Remote Option", wheel: "MP-LR-UB-EASY" } }
+
+            }
+
+        },
+
+        "Merlo": {
+
+            "Panoramic / Turbo": {
+
+                landingPage: "/Telehandler-Attachments-Page",
+
+                sweeping: { front: { bracket: "Kersten ABR 60 MERLO", machine: "FKM 22560 HY", collector: "SSB 22560", gully: "ASH 4060", infrastructure: [{ name: "Hydraulic Quick-Release", link: "/front-linkages" }] }, rear: null },
+
+                winter: { front: { bracket: "Kersten ABR 60 MERLO", machine: "Kersten SNK 270 HY", infrastructure: [{ name: "Hydraulic Service", link: "/front-linkages" }] }, rear: null },
+
+                weedbrush: { front: { bracket: "ABR-UB-MERLO", machine: "UB Easy VB (Vertibrush)", disc: "80cm Vertical Head", control: "Wireless Remote Option", wheel: "MP-LR-UB-EASY" } }
+
+            }
+
+        },
+
+        "Industrial": {
+
+            "Forklift / Telehandler": {
+
+                landingPage: "/Industrial-Forklift-Attachments-Page",
+
+                sweeping: { front: { bracket: "ABR 60 FORK", machine: "KM 15060 HY", collector: "SSB 15060", gully: "ASH 4060" }, rear: null },
+
+                winter: { front: { bracket: "ABR 60 FORK", machine: "Kersten SNK 220 HY" }, rear: null },
+
+                weedbrush: null
+
+            }
+
+        }
+
+    };
+
+
+
+    const winterOnlyVehicles = {
+
+        "Ford": {
+
+            "Ranger (All Models)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }, { name: "12V Integrated Battery System", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Tailgate / Bed", machine: "Lehner Polaro 170 / 250 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }, { name: "Lehner In-Cab Controller", link: "/front-linkages" }] }
+
+                }
+
+            },
+
+            "Transit (Van)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Van Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Tailgate", machine: "Lehner Polaro 110 (Tailgate)", infrastructure: [{ name: "Tailgate Mount", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        },
+
+        "Toyota": {
+
+            "Hilux (All Models)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Tailgate / Bed", machine: "Lehner Polaro 170 / 250 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        },
+
+        "Isuzu": {
+
+            "D-Max (All Models)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Tailgate / Bed", machine: "Lehner Polaro 170 / 250 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        },
+
+        "Mitsubishi": {
+
+            "L200 (All Models)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Tailgate / Bed", machine: "Lehner Polaro 170 / 250 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        },
+
+        "Land Rover": {
+
+            "Defender 90/110": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Bed/Tailgate", machine: "Lehner Polaro 170 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }] }
+
+                }
+
+            },
+
+            "Discovery": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Tailgate", machine: "Lehner Polaro 110", infrastructure: [{ name: "Tailgate Mount", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        },
+
+        "VW": {
+
+            "Amarok (All Models)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Bed", machine: "Lehner Polaro 170 / 250 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        },
+
+        "Nissan": {
+
+            "Navara (All Models)": {
+
+                landingPage: "/Faulkner-Brothers-Snow-Ploughs-for-4x4s-and-Utility-Vehicles",
+
+                winter: {
+
+                    front: { bracket: "2-Inch Receiver", machine: "Faulkner Bros 4x4 Plough", infrastructure: [{ name: "Faulkner Front Chassis Mount", link: "/front-linkages" }] },
+
+                    rear: { bracket: "Bed", machine: "Lehner Polaro 170 / 250 / XL", infrastructure: [{ name: "Bed Mounting Frame", link: "/front-linkages" }] }
+
+                }
+
+            }
+
+        }
+
+    };
+
+
+
+// --- 4. LOGIC & INJECTION (RED BRAND STYLING) ---
+
+    const loadWizardLogic = (container) => {
+
+        container.innerHTML = `
+
+            <div id="wizard-wrapper" style="background:#f9fbf9; border:3px solid ${K_RED}; border-radius:16px; padding:30px; margin-bottom:20px; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; box-shadow:0 15px 35px rgba(211, 47, 47, 0.15); position:relative; overflow:hidden;">
+
+                <div style="position:absolute; top:0; left:0; width:100%; height:6px; background:${K_RED};"></div>
+
+                
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+
+                    <h4 style="margin:0; color:${K_RED}; font-size:20px; font-weight:900; letter-spacing:-0.5px; text-transform:uppercase;">🚜 Professional Fitment Finder</h4>
+
+                    ${!container.closest('.kersten-homepage-wizard') ? '<button onclick="this.closest(\'.kersten-fitment-wizard\').remove()" style="background:#eee; border:none; border-radius:50%; width:24px; height:24px; color:#666; cursor:pointer;">✕</button>' : ''}
+
+                </div>
+
+                
+
+                <p style="font-size:14px; color:#444; margin-bottom:20px; line-height:1.6; font-weight:500;">Select your vehicle below to verify compatibility, check hydraulic/PTO requirements, and generate a <strong>Validated Technical Spec Sheet</strong>.</p>
+
+                
+
+                <div style="background:#f8f8f8; border-radius:10px; padding:6px; margin-bottom:20px; display:flex; justify-content:center; gap:10px; border:1px solid #eee;">
+
+                    <label style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px; transition:0.2s;" class="mode-label">
+
+    <input type="radio" name="app-mode" value="sweeping" checked> 🧹 Sweeping
+
+</label>
+
+                    <label style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px; transition:0.2s; color:${K_BLUE};" class="mode-label"><input type="radio" name="app-mode" value="winter"> ❄️ Winter</label>
+
+                    <label style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px; transition:0.2s; color:${K_BROWN};" class="mode-label"><input type="radio" name="app-mode" value="weedbrush"> 🌿 Weed Brush</label>
+
+                </div>
+
+                
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+
+                    <select id="t-brand" style="padding:14px; border-radius:8px; border:2px solid #ddd; background:#fff; font-size:15px; font-weight:bold; color:${K_DARK}; outline:none; transition:border-color 0.3s; width:100%;"><option value="">-- Select Brand --</option></select>
+
+                    <select id="t-model" style="padding:14px; border-radius:8px; border:2px solid #ddd; background:#fff; font-size:15px; font-weight:bold; color:${K_DARK}; outline:none; width:100%;" disabled><option value="">-- Select Model --</option></select>
+
+                </div>
+
+
+
+                <div id="mount-area" style="display:block; margin-bottom:20px; background:#fff2f2; padding:15px; border-radius:10px; border:1px solid ${K_RED}44;">
+
+                    <span style="font-size:12px; font-weight:900; color:${K_RED}; display:block; margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;">Mounting Position:</span>
+
+                   <label style="margin-right:30px; font-size:15px; cursor:pointer; font-weight:bold; color:${K_DARK};">
+
+    <input type="radio" name="m-pos" value="front" checked> Front Mount
+
+</label>
+
+                    <label id="rear-label" style="font-size:15px; cursor:pointer; font-weight:bold; color:${K_DARK};"><input type="radio" name="m-pos" value="rear"> Rear Mount</label>
+
+                </div>
+
+
+
+                <div id="f-res" style="display:none; background:#fff; border:2px solid #eee; border-radius:12px; padding:25px; animation:wizardSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
+
+            </div>
+
+            
+
+            <style>
+
+                @keyframes wizardSlideIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+
+                .mode-label:has(input:checked) { background: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+
+                #t-brand:focus, #t-model:focus { border-color: ${K_RED} !important; }
+
+
+
+                /* --- FINAL FIXED PRINT CSS (WHOLE TOOL) --- */
+
+                @media print {
+
+                    /* 1. Collapse the rest of the site */
+
+                    html, body {
+
+                        height: 0 !important;
+
+                        overflow: hidden !important;
+
+                        margin: 0 !important;
+
+                        padding: 0 !important;
+
+                    }
+
+                    
+
+                    body * {
+
+                        visibility: hidden;
+
+                    }
+
+
+
+                    /* 2. Target the WRAPPER (everything in the tool) */
+
+                    #wizard-wrapper {
+
+                        visibility: visible !important;
+
+                        position: fixed !important;
+
+                        left: 0 !important;
+
+                        top: 0 !important;
+
+                        width: 100% !important;
+
+                        height: auto !important;
+
+                        margin: 0 !important;
+
+                        padding: 20px !important;
+
+                        background: white !important;
+
+                        border: 2px solid #ccc !important; /* Lighter border for print */
+
+                        box-shadow: none !important; /* Remove shadow for print */
+
+                        z-index: 999999;
+
+                        
+
+                        page-break-inside: avoid !important;
+
+                        break-inside: avoid !important;
+
+                    }
+
+
+
+                    /* 3. Make everything INSIDE the wrapper visible */
+
+                    #wizard-wrapper * {
+
+                        visibility: visible !important;
+
+                    }
+
+
+
+                    /* 4. Hide just the buttons (Print/Quote) inside the tool */
+
+                    #wizard-wrapper button, #wizard-wrapper a {
+
+                        display: none !important;
+
+                    }
+
+
+
+                    /* 5. Clean up badge */
+
+                    #sector-validation-badge {
+
+                        border: 1px solid #ccc !important;
+
+                        background: none !important;
+
+                    }
+
+                }
+
+            </style>
+
+        `;
+
+
+
+        const bSel = container.querySelector('#t-brand');
+
+        const mSel = container.querySelector('#t-model');
+
+        const res = container.querySelector('#f-res');
+
+        const tgl = container.querySelector('#mount-area');
+
+        const appRadios = container.querySelectorAll('input[name="app-mode"]');
+
+
+
+        const getActiveDB = () => {
+
+            const mode = container.querySelector('input[name="app-mode"]:checked').value;
+
+            return mode === 'winter' ? { ...commonVehicles, ...winterOnlyVehicles } : commonVehicles;
+
+        };
+
+
+
+        const populateBrands = () => {
+
+            const db = getActiveDB();
+
+            const mode = container.querySelector('input[name="app-mode"]:checked').value;
+
+            container.querySelector('#rear-label').style.display = (mode === 'weedbrush') ? 'none' : 'inline-block';
+
+
+
+            const selectedBrand = bSel.value;
+
+            bSel.innerHTML = '<option value="">-- Brand --</option>';
+
+            Object.keys(db).forEach(b => bSel.innerHTML += `<option value="${b}" ${b === selectedBrand ? 'selected' : ''}>${b}</option>`);
+
+
+
+            // Auto-trigger if brand is already selected (e.g. browser cache)
+
+            if(selectedBrand && db[selectedBrand]) populateModels();
+
+            else { mSel.innerHTML = '<option value="">-- Model --</option>'; mSel.disabled = true; res.style.display = 'none'; }
+
+        };
+
+
+
+        const populateModels = () => {
+
+            const db = getActiveDB();
+
+            const brand = bSel.value;
+
+            mSel.innerHTML = '<option value="">-- Model --</option>';
+
+            if (brand && db[brand]) {
+
+                Object.keys(db[brand]).sort().forEach(m => mSel.innerHTML += `<option value="${m}">${m}</option>`);
+
+                mSel.disabled = false;
+
+            }
+
+        };
+
+
+
+        const updateDisplay = () => {
+
+            const db = getActiveDB();
+
+            const brand = bSel.value;
+
+            const model = mSel.value;
+
+            const pos = container.querySelector('input[name="m-pos"]:checked').value;
+
+            const mode = container.querySelector('input[name="app-mode"]:checked').value;
+
+
+
+            if (brand && model && db[brand][model]) {
+
+                let data = db[brand][model][mode] ? db[brand][model][mode][pos] : null;
+
+
+
+                if (!data) {
+
+                    res.innerHTML = `<p style="color:#c0392b; font-size:15px; font-weight:bold; margin:0; text-align:center;">⚠️ Configuration not available for this mode.</p>`;
+
+                } else {
+
+                    let machineLabel = 'Machine';
+
+                    let accentColor = K_RED;
+
+                    if (mode === 'sweeping') machineLabel = 'Sweeper';
+
+                    if (mode === 'winter') { machineLabel = pos === 'rear' ? 'Spreader' : 'Plough'; accentColor = K_BLUE; }
+
+                    if (mode === 'weedbrush') { machineLabel = 'Weed Brush'; accentColor = K_BROWN; }
+
+
+
+                    const items = [`🔧 <strong>Bracket:</strong> ${data.bracket}`, `⚙️ <strong>${machineLabel}:</strong> ${data.machine}`];
+
+
+
+                    if (data.collector) items.push(`📦 <strong>Collector Box:</strong> ${data.collector}`);
+
+                    if (data.gully) items.push(`🛠️ <strong>Gully Brush:</strong> ${data.gully}`);
+
+                    if (data.disc) items.push(`💿 <strong>Disc Size:</strong> ${data.disc}`);
+
+                    if (data.control) items.push(`🎮 <strong>Control:</strong> ${data.control}`);
+
+                    if (data.wheel) items.push(`🎡 <strong>Adjustment:</strong> ${data.wheel}`);
+
+                    if (data.infrastructure) items.push(`⚠️ <strong>Required:</strong> ${data.infrastructure.map(i => i.name).join(', ')}`);
+
+
+
+                    const productUrl = db[brand][model].landingPage || getProductLink(data.machine);
+
+                    const fullInquiryBody = `FITMENT CHECK (${mode.toUpperCase()}): ${brand} ${model}\n\nI would like a verified quote for:\n\n- Vehicle: ${brand} ${model}\n- ${items.map(s => s.replace(/<[^>]*>/g, '')).join('\n- ')}\n\nPlease check compatibility.`;
+
+                    const inquiryLink = `/Contact-us-2?message=${encodeURIComponent(fullInquiryBody)}`;
+
+
+
+                    // --- INTEGRATED SECTOR BADGE LOGIC ---
+
+                    const sectorBadge = getSectorBadge(brand) || getSectorBadge(model);
+
+
+
+                    res.innerHTML = `
+
+                        <div id="print-area">
+
+                            ${sectorBadge}
+
+                            <div style="border-bottom: 2px solid ${accentColor}; margin-bottom: 15px; padding-bottom: 10px;">
+
+                                <strong style="color:${accentColor}; font-size:18px;">${mode === 'winter' ? 'Winter Spec Sheet' : (mode === 'weedbrush' ? 'IWM Weed Spec Sheet' : 'Sweeper Fitment Sheet')}</strong>
+
+                                <div style="font-size:13px; color:#666; font-weight:bold; margin-top:5px;">Verified for <strong>${brand} ${model}</strong></div>
+
+                            </div>
+
+                            <ul style="list-style:none; padding:0; margin:0 0 20px 0; font-size:14px; line-height:1.8; color:#333;">
+
+                                ${items.map(i => `<li style="border-bottom:1px solid #f0f0f0; padding:4px 0;">${i}</li>`).join('')}
+
+                            </ul>
+
+                            ${data.note ? `<p style="font-size:12px; color:#c0392b; font-weight:bold; margin-bottom:15px; padding:10px; border:1px solid #f5c6cb; background:#f8d7da; border-radius:4px;">${data.note}</p>` : ''}
+
+                        </div>
+
+                        <div style="display:grid; gap:10px;">
+
+                            <a href="${productUrl}" style="display:block; background:#fff; border:2px solid ${accentColor}; color:${accentColor}; text-align:center; padding:12px; border-radius:8px; text-decoration:none; font-weight:800; text-transform:uppercase; font-size:13px; transition:all 0.2s;">👀 View All Attachments for ${model}</a>
+
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <a href="${inquiryLink}" style="background:#27ae60; color:#fff; text-align:center; padding:15px; border-radius:8px; text-decoration:none; font-weight:900; text-transform:uppercase; font-size:13px; box-shadow:0 4px 10px rgba(39, 174, 96, 0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Get a Quote for this Exact Setup &rarr;</a>
+                                <button onclick="window.print()" style="background:#eee; color:#333; border:none; border-radius:8px; cursor:pointer; font-weight:900; font-size:13px; transition: background 0.2s ease;" onmouseover="this.style.background='#e0e0e0'" onmouseout="this.style.background='#eee'">🖨️ Print PDF</button>
+                            </div>
+
+                        </div>`;
+
+                }
+
+                res.style.display = 'block';
+
+            }
+
+        };
+
+
+
+        appRadios.forEach(r => r.addEventListener('change', () => { res.style.display = 'none'; populateBrands(); }));
+
+        bSel.onchange = () => { populateModels(); }; // Mount area now always visible by default
+
+        mSel.onchange = updateDisplay;
+
+        container.querySelectorAll('input[name="m-pos"]').forEach(r => r.addEventListener('change', updateDisplay));
+
+       // --- FORCE PRE-SELECTION (FIX) ---
+
+    // 1. Manually force the "Sweeping" radio to be checked in the DOM
+
+    const sweepRadio = container.querySelector('input[value="sweeping"]');
+
+    if (sweepRadio) sweepRadio.checked = true;
+
+
+
+    // 2. Manually force "Front Mount" to be checked
+
+    const frontRadio = container.querySelector('input[value="front"]');
+
+    if (frontRadio) frontRadio.checked = true;
+
+
+
+    // 3. Run the logic to populate brands based on these forced selections
+
+    populateBrands();
+
+};
+
+
+
+  // --- 5. INJECTION & AUTO-FILL ---
+    const injectWizard = () => {
+        if (window.location.href.includes('fitment-tool-embed')) return;
+
+        const excludedPaths = [
+    '/weed-brush/weedo-series/weedo-ii',
+    '/Products-By-Vehicle-Type',
+    '/integrated-weed-management-trial-bracknell-kersten-uk-complete-weed-control',
+    '/hot-air-weed-removers/unpowered-pedestrian-hot-air-weed-removers/hoaf-weed-air-50i-weed-burner-hf20000477-it6ag',
+    '/non-chemical-weed-control-supply-continuity',
+    '/login',
+    '/gravel-path-renovators-and-graders',
+    '/Salt-Spreaders-and-Ice-Management',
+    '/electric-weeding-equipment',
+    '/Weed-brush-attachment-series',
+    '/Mounted-Collector-series',
+    '/Acti-Sweep-Tractor-Mounted-Push-Brooms',
+    '/Weed-brush-attachment-series',
+    '/Cerruti-Snow-Blowers-For-Compact-Tractors',
+    '/Front-Sweeper-to-fit-a-Kubota-BX-231',
+    '/vacuum-nozzle-attachment-series',
+    '/Matador-wheelbarrows',
+    '/Kersten-Tractor-Mounted-Watering-Arms-for-Compact-Tractors',
+    '/small-area-weed-removal-weedgo!',
+    '/Products-by-Application-Type',
+    '/kersten-machines',
+    '/Contact-us-2',
+    '/kersten-machinery-hire',
+    '/the-weeds-are-not-the-problem-book',
+    '/Site-Maintenance-Equipment-for-All-Seasons',
+    '/Search-by-Kersten-Product-Type',
+    '/national-action-plan-2025-council-guide',
+    '/Kersten-Case-Studies-and-Customer-Results',
+    '/Book-a-Demonstration-of-a-Kersten-Machine',
+    '/Kersten-Used-Equipment-Finance-and-Trade-in',
+    '/Search-By-Product-Category',
+    '/about-kersten-uk-ltd',
+    '/Contact-us-Optimise-Herbicide-Efficiency',
+    '/api/method/',
+    '/orders',
+    '/cart',
+    '/education-healthcare-estates-groundcare',
+    '/Local-Authority-Integrated-Weed-Management-Plan',
+    '/historic-buildings-heritage-estates-groundcare',
+    '/grounds-maintenance-contractors-equipment-support',
+    '/Kersten-Stocking-Dealers-Hire-Partners-and-Contractors'
+
+];
+    if (excludedPaths.some(path => window.location.pathname.includes(path))) return;
+
+        // CHECK: If on blog, ask the controller
+        if (window.location.href.includes('/blog')) {
+            const ctx = window.kerstenBlogContextCache || window.getKerstenBlogContext();
+            if (ctx.tool !== 'wizard') return;
+        }
+
+        const currentPath = window.location.pathname;
+        const isHomepage = currentPath === '/' || currentPath === '/index.html' || currentPath === '/home';
+
+        if (isHomepage) {
+            if (document.querySelector('.kersten-homepage-wizard')) return;
+            const gridSection = document.getElementById('browse-grid');
+            if (gridSection) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'kersten-homepage-wizard';
+                wrapper.id = 'fitment-wizard';
+                wrapper.style.cssText = "background: #fdfdfd; padding: 60px 20px; text-align: center; border-bottom: 1px solid #eee; width: 100%; display: block; overflow: visible;";
+                wrapper.innerHTML = `
+                    <div style="max-width: 1250px; margin: 0 auto;">
+                        <h2 style='color: #D32F2F; font-size:32px; margin-bottom: 15px; font-weight: 900; text-transform:uppercase; letter-spacing:-1px;'>🚜 Check Tractor Fitment</h2>
+                        <p style='font-size: 16px; color: #666; margin: 0 auto 30px auto; max-width:600px; line-height:1.6;'>
+                            Already own a tractor? Select your model below to see certified compatible attachments.
+                        </p>
+                        <div class="kersten-fitment-wizard"></div>
+                    </div>
+                `;
+                gridSection.parentNode.insertBefore(wrapper, gridSection.nextSibling);
+                loadWizardLogic(wrapper.querySelector('.kersten-fitment-wizard'));
+                return;
+            }
+        }
+
+
+
+        if (document.querySelector('.kersten-fitment-wizard')) return;
+
+        // Build the visual element first
+        const placeholder = document.createElement('div');
+        placeholder.className = 'kersten-fitment-wizard';
+        // Added 'clear: both' and 'width: 100%' to ensure it doesn't get squashed beside grid items
+        placeholder.style.cssText = "margin: 60px auto 40px auto; min-height: 150px; max-width: 1200px; clear: both; width: 100%; display: block;";
+        placeholder.innerHTML = `
+            <div id="kersten-wizard-trigger" style="background: #fff; border: 3px dashed ${K_RED}; border-radius: 16px; padding: 40px; text-align: center; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+                <div style="font-size:40px; margin-bottom:15px;">🚜</div>
+                <h4 style="margin:0 0 10px 0; color:${K_RED}; font-size:22px; font-weight:900; text-transform:uppercase;">Check Machine Compatibility</h4>
+                <p style="color:#666; font-size:15px; margin-bottom:25px; max-width:500px; margin-left:auto; margin-right:auto;">Verify this machine against your specific tractor or vehicle model in seconds.</p>
+                <button style="background: ${K_RED}; color: #fff; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 900; font-size:16px; cursor: pointer; box-shadow: 0 4px 15px ${K_RED}44; animation: k-pulse 2s infinite;">Start Fitment Wizard</button>
+            </div>
+            <style>
+                @keyframes k-pulse { 0% { box-shadow: 0 0 0 0 ${K_RED}66; } 70% { box-shadow: 0 0 0 15px ${K_RED}00; } 100% { box-shadow: 0 0 0 0 ${K_RED}00; } }
+                #kersten-wizard-trigger:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-style: solid; }
+            </style>`;
+
+        // NEW LOGIC: Determine if this is a specific Product page or a Category page
+        const isProductPage = document.querySelector('.product-price, .cart-btn, [itemprop="offers"], .item-price');
+
+        if (isProductPage) {
+            // PRODUCT PAGE: Put it high up near the specs/description
+            let target = document.querySelector('table, .specification-table, .product-specs, .frappe-table') || document.querySelector('.product-description, .web-page-content') || document.querySelector('.cart-btn, .product-price');
+
+            if (target && target.parentNode) {
+                // FIX: Insert ABOVE the target table
+                target.parentNode.insertBefore(placeholder, target);
+                placeholder.querySelector('#kersten-wizard-trigger').addEventListener('click', function() { loadWizardLogic(placeholder); }, { once: true });
+            }
+
+            // ADDITION: Inject a clear CTA button right under the price to reduce bounce rate
+            const priceArea = document.querySelector('.product-price, .item-price, .cart-btn');
+            if (priceArea && !document.querySelector('.kersten-jump-btn')) {
+                const jumpBtn = document.createElement('button');
+                jumpBtn.className = 'kersten-jump-btn';
+                jumpBtn.innerHTML = '🚜 Check if this fits your machine &darr;';
+                jumpBtn.style.cssText = 'display:block; width:100%; max-width:300px; margin-top:15px; padding:12px; background:#D32F2F; color:white; border:none; border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; text-transform:uppercase; box-shadow:0 4px 6px rgba(211,47,47,0.2); transition:transform 0.2s;';
+
+                jumpBtn.onclick = (e) => {
+                    e.preventDefault();
+                    // Scroll smoothly to the wizard
+                    placeholder.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Auto-open the wizard to save the user a click
+                    const trigger = placeholder.querySelector('#kersten-wizard-trigger');
+                    if (trigger) trigger.click();
+                };
+
+                priceArea.parentNode.insertBefore(jumpBtn, priceArea.nextSibling);
+            }
+        } else {
+            // CATEGORY PAGE LOGIC: Intercept right before the product grid begins
+            // Using the exact Bootstrap classes you identified
+            const firstCard = document.querySelector('.card.card-md, .card, .item-card, .product-card');
+
+            if (firstCard) {
+                // Step 1: Go up from the card to find the row/grid that holds all the products
+                const cardGrid = firstCard.closest('.row') || firstCard.parentNode;
+
+                // Step 2: Insert the wizard immediately above that grid
+                if (cardGrid && cardGrid.parentNode) {
+                    cardGrid.parentNode.insertBefore(placeholder, cardGrid);
+                } else {
+                    firstCard.parentNode.insertBefore(placeholder, firstCard);
+                }
+            } else {
+                // Fallback: If it's an empty category with no cards, tuck it under the H1
+                const pageTitle = document.querySelector('h1');
+                if (pageTitle && pageTitle.parentNode) {
+                    pageTitle.parentNode.insertBefore(placeholder, pageTitle.nextSibling);
+                } else {
+                    let backupContainer = document.querySelector('.page_content, main') || document.body;
+                    backupContainer.insertBefore(placeholder, backupContainer.firstChild);
+                }
+            }
+
+            placeholder.querySelector('#kersten-wizard-trigger').addEventListener('click', function() { loadWizardLogic(placeholder); }, { once: true });
+        }
+    };
+
+
+
+    // --- 6. DYNAMIC SCHEMA ENGINE ---
+
+    const injectDynamicSchema = () => {
+
+        if (!isAttachmentPage) return;
+
+        const pageTitle = document.title;
+
+        const pageH1 = document.querySelector('h1') ? document.querySelector('h1').innerText : "";
+
+        const combinedText = (pageTitle + " " + pageH1).toLowerCase();
+
+        const compatibleVehicles = [];
+
+        const allDBs = { ...commonVehicles, ...winterOnlyVehicles };
+
+
+
+        Object.keys(allDBs).forEach(brand => {
+
+            Object.keys(allDBs[brand]).forEach(model => {
+
+                const vehicleData = allDBs[brand][model];
+
+                ['sweeping', 'winter', 'weedbrush'].forEach(mode => {
+
+                    if (!vehicleData[mode]) return;
+
+                    ['front', 'rear'].forEach(pos => {
+
+                        const fitment = vehicleData[mode][pos];
+
+                        if (fitment && fitment.machine) {
+
+                            const cleanMachine = fitment.machine.split('(')[0].trim().toLowerCase();
+
+                            if (combinedText.includes(cleanMachine) && cleanMachine.length > 3) {
+
+                                compatibleVehicles.push({
+
+                                    "@type": "Product",
+
+                                    "name": `${brand} ${model}`,
+
+                                    "brand": { "@type": "Brand", "name": brand }
+
+                                });
+
+                            }
+
+                        }
+
+                    });
+
+                });
+
+            });
+
+        });
+
+
+
+        const uniqueVehicles = Array.from(new Set(compatibleVehicles.map(v => JSON.stringify(v)))).map(s => JSON.parse(s));
+
+        if (uniqueVehicles.length === 0) return;
+
+
+
+        const schemaData = {
+
+            "@context": "https://schema.org/",
+
+            "@type": "Product",
+
+            "name": pageH1 || pageTitle,
+
+            "brand": { "@type": "Brand", "name": "Kersten" },
+
+            "description": (document.querySelector('meta[name="description"]') ? document.querySelector('meta[name="description"]').content : "") || `Professional attachment compatible with ${uniqueVehicles.length} tractor models.`,
+
+            "isAccessoryOrSparePartFor": uniqueVehicles
+
+        };
+
+
+
+        const script = document.createElement('script');
+
+        script.type = "application/ld+json";
+
+        script.text = JSON.stringify(schemaData);
+
+        document.head.appendChild(script);
+
+    };
+
+
+
+    injectWizard();
+
+
+    injectDynamicSchema();
+
+    setInterval(() => { injectWizard(); }, 2000);
+
+
+
+})();

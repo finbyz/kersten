@@ -1,0 +1,96 @@
+// Standalone Logistics Bar — mount via #kersten-logistics-bar-root
+// Optional overrides: data-weight, data-width, data-noise on root element
+
+(function() {
+    function scanLogisticsData() {
+        let weight = 0;
+        let width = 0;
+        let noise = 0;
+
+        document.querySelectorAll('table tr, .specification-row, .frappe-table tr').forEach(row => {
+            if (row.cells && row.cells.length >= 2) {
+                const key = row.cells[0].innerText.toLowerCase();
+                const val = row.cells[1].innerText.toLowerCase();
+                const numbers = val.match(/(\d+(\.\d+)?)/g);
+                const firstNum = numbers ? parseFloat(numbers[0]) : 0;
+
+                if (key.includes('weight') || key.includes('mass')) {
+                    weight = val.includes('ton') ? firstNum * 1000 : firstNum;
+                }
+                if (key.includes('width')) {
+                    const calculatedWidth = val.includes('mm')
+                        ? firstNum / 10
+                        : (val.includes('m') && !val.includes('cm') ? firstNum * 100 : firstNum);
+                    if (width === 0 || key.includes('working')) width = calculatedWidth;
+                }
+                if (key.includes('noise') || key.includes('sound') || key.includes('db')) {
+                    noise = firstNum;
+                }
+            }
+        });
+
+        return { weight, width, noise };
+    }
+
+    function buildBadges(weight, width, noise) {
+        const badges = [];
+
+        if (weight > 0 && weight < 750) badges.push('🚗 Easy Tow (<750kg)');
+        else if (weight >= 750) badges.push('🚛 Trailer Required');
+
+        if (width > 0 && width < 100) badges.push('🚪 Fits Single Gates');
+        else if (width > 0 && width < 155) badges.push('🚪 Fits Double Gates');
+
+        if (noise > 0 && noise < 85) badges.push(`<span>🔇 Urban Quiet (${noise}dB)</span>`);
+
+        return badges;
+    }
+
+    const loadLogisticsBar = (container) => {
+        const scanned = scanLogisticsData();
+        const weight = parseFloat(container.dataset.weight) || scanned.weight;
+        const width = parseFloat(container.dataset.width) || scanned.width;
+        const noise = parseFloat(container.dataset.noise) || scanned.noise;
+
+        if ((weight === 0 && width === 0) || !document.querySelector('table, .specification-table, .product-specs')) {
+            container.style.display = 'none';
+            return;
+        }
+
+        const badges = buildBadges(weight, width, noise);
+        if (badges.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.className = 'logistics-bar kersten-logistics-bar';
+        container.style.cssText = 'margin: 40px 0 15px 0; clear: both; padding-top: 10px; width: 100%; box-sizing: border-box; display: block;';
+
+        container.innerHTML = `
+            <p style="margin: 0 0 12px 0; font-size: 13px; font-weight: 800; color: #004d26; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+                ⚙️ Site Logistics Summary
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                ${badges.map(b => `
+                    <div style="background:#fff; border:2px solid #004d26; color:#004d26; padding:12px 20px; border-radius:30px; font-size:15px; font-weight:800; box-shadow: 0 4px 10px rgba(0,0,0,0.08); display:flex; align-items:center; transition: all 0.2s ease;">
+                        ${b}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    };
+
+    const mountWidget = () => {
+        const root = document.getElementById('kersten-logistics-bar-root');
+        if (root && !root.dataset.initialized) {
+            root.dataset.initialized = 'true';
+            loadLogisticsBar(root);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mountWidget);
+    } else {
+        mountWidget();
+    }
+})();
