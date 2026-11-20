@@ -1,0 +1,62 @@
+// Standalone Kersten Series Carousel (Schema.org ItemList) — mount via #kersten-series-carousel-root
+// Place on series/range product listing pages. Scans page for product cards and injects structured data.
+// Optional: data-series-name="Kersten UBS Series" on root to override the ItemList name
+
+(function() {
+    function performSchemaInjection(schemaData) {
+        const schemaScript = document.createElement('script');
+        schemaScript.type = 'application/ld+json';
+        schemaScript.text = JSON.stringify(schemaData);
+        document.head.appendChild(schemaScript);
+    }
+
+    function buildItemList(root) {
+        const carouselItems = [];
+        const productCards = document.querySelectorAll('.product-item, .product-card, .item-card, .shop-card');
+
+        productCards.forEach((card, index) => {
+            const linkElement = card.querySelector('a');
+            const imgElement = card.querySelector('img');
+            const titleElement = card.querySelector('.product-title, .item-title, h3, h4');
+
+            if (linkElement && titleElement) {
+                carouselItems.push({
+                    '@type': 'ListItem',
+                    position: index + 1,
+                    url: linkElement.href,
+                    name: titleElement.innerText.trim(),
+                    image: imgElement ? imgElement.src : 'https://kerstenuk.com/files/kersten-logo.png'
+                });
+            }
+        });
+
+        if (carouselItems.length === 0) return;
+
+        const seriesName = root.dataset.seriesName
+            || document.querySelector('h1')?.innerText
+            || 'Kersten Machine Series';
+
+        performSchemaInjection({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: seriesName,
+            itemListOrder: 'https://schema.org/ItemListOrderAscending',
+            numberOfItems: carouselItems.length,
+            itemListElement: carouselItems
+        });
+    }
+
+    const mountWidget = () => {
+        const root = document.getElementById('kersten-series-carousel-root');
+        if (root && !root.dataset.initialized) {
+            root.dataset.initialized = 'true';
+            buildItemList(root);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mountWidget);
+    } else {
+        mountWidget();
+    }
+})();
